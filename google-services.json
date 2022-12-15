@@ -1,0 +1,54 @@
+{
+  "project_info": {
+    "project_number": "412753396653",
+    "project_id": "fireship-lessons-8324d",
+    "storage_bucket": "fireship-lessons-8324d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:412753396653:android:92483dad26ed1241bc9724",
+        "android_client_info": {
+          "package_name": "host.exp.exponent"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "412753396653-icin29k9l6s07a8skvjm063p9fobb4of.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "host.exp.exponent",
+            "certificate_hash": "13ad67c85f61ec524c00aea32faf2778c8adf676"
+          }
+        },
+        {
+          "client_id": "412753396653-03g79skj2d2uh5rvcs8mrd6o1ubgeefb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCunUFh_6d5CToAuqqPzRh81lay_xZF7qU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "412753396653-03g79skj2d2uh5rvcs8mrd6o1ubgeefb.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "412753396653-ean5ed8bks3cubkds0q6c67is9pttcl7.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "host.exp.exponent"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
