@@ -8,7 +8,7 @@ import {
 	TouchableOpacity,
 	ScrollView,
 } from 'react-native'
-import tw from 'tailwind-rn'
+import tw  from 'tailwind-rn'
 import useAuth from '../hooks/useAuth'
 import { StatusBar } from 'expo-status-bar'
 import { useNavigation } from '@react-navigation/core'
@@ -30,22 +30,22 @@ import { db } from '../firebase'
 import Communications from 'react-native-communications'
 
 import * as Contacts from 'expo-contacts'
+import ContactCard from '../components/ContactCard';
 
 function Home() {
 	const { user, logout } = useAuth()
 	const [profiles, setProfiles] = useState([])
 	const navigation = useNavigation()
 	const swipeRef = useRef(null)
-
+	
 	let [error, setError] = useState(undefined)
 	let [contacts, setContacts] = useState(undefined)
-
+		
 	useLayoutEffect(() => {
 		navigation.setOptions({
 			headerShown: false,
 		})
 	}, [])
-
 
 	useEffect(() => {
 		;(async () => {
@@ -72,60 +72,59 @@ function Home() {
 		})()
 	}, [])
 
-	let ContactCard = (phone) => {
-		console.log('phone', phone);
-		return (
-		<View style={styles.container}>
-			{/* Phone */}
-			<TouchableOpacity
-				onPress={() => Communications.phonecall(String(phone.phone), true)}>
-				<View style={styles.holder}>
-					<Text style={styles.text}>Make phonecall</Text>
-				</View>
-			</TouchableOpacity>
+	// let ContactCard = (phone) => {
+	// 	console.log('phone', phone)
+	// 	return (
+	// 		<View style={tw('flex-1 relative')}>
+	// 			<Text style={styles.text}>Make phone call</Text>
 
-			{/* Text */}
-			<TouchableOpacity onPress={() => Communications.text(phone.phone)}>
-				<View style={styles.holder}>
-					<Text style={styles.text}>Send a text/iMessage</Text>
-				</View>
-			</TouchableOpacity>
-		</View>
-		)
-	}
+	// 			{/* Phone */}
+	// 			<TouchableOpacity
+	// 				onPress={() =>
+	// 					Communications.phonecall(String(phone.phone), true)
+	// 				}>
+	// 				<View style={styles.holder}>
+	// 					<Text style={styles.text}>Make phone call</Text>
+	// 				</View>
+	// 			</TouchableOpacity>
 
-	let getContactData = (data, property) => {
-		if (data) {
-			return data.map((data, index) => {
-				return (
-					<View key={index}>
-						<Text>
-							{data.label}: {data[property]}
-						</Text>
-					</View>
-				)
-			})
-		}
-	}
+	// 			{/* Text */}
+	// 			<TouchableOpacity
+	// 				onPress={() => Communications.text(phone.phone)}>
+	// 				<View style={styles.holder}>
+	// 					<Text style={styles.text}>Send a text/iMessage</Text>
+	// 				</View>
+	// 			</TouchableOpacity>
+	// 		</View>
+	// 	)
+	// }
+
+	// let getContactData = (data, property) => {
+	// 	if (data) {
+	// 		return data.map((data, index) => {
+	// 			return (
+	// 				<View key={index}>
+	// 					<Text>
+	// 						{data.label}: {data[property]}
+	// 					</Text>
+	// 				</View>
+	// 			)
+	// 		})
+	// 	}
+	// }
 
 	let getContactRows = () => {
+		console.log(contacts);
 		if (contacts !== undefined) {
 			return contacts.map((contact, index) => {
 				return (
-					<ContactCard key={index} phone={contact.phoneNumbers[0].digits} email={contact.email} web={contact.web} />
-					// <View key={index} style={styles.contact}>
-					// 	<Text>
-					// 		Name: {contact.firstName} {contact.lastName}
-					// 	</Text>
-					// 	{contact.birthday ? (
-					// 		<Text>
-					// 			Birthday: {contact.birthday.month}/
-					// 			{contact.birthday.day}/{contact.birthday.year}
-					// 		</Text>
-					// 	) : undefined}
-					// 	{getContactData(contact.phoneNumbers, 'number')}
-					// 	{getContactData(contact.emails, 'email')}
-					// </View>
+					// <ContactCard
+					// 	key={index}
+					// 	phone={contact.phoneNumbers[0].digits}
+					// 	email={contact.email}
+					// 	web={contact.web}
+					// />
+					<ContactCard contact={contact} key={index}/>
 				)
 			})
 		} else {
