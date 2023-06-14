@@ -8,7 +8,7 @@ const ContactCard = ({ contact }) => {
 		contact
 
 	return (
-		<View style={tw(`bg-white rounded-lg p-4 shadow-md`)}>
+		<View style={tw(`bg-white rounded-lg p-4`)}>
 			<View style={tw(`flex-row items-center mb-4`)}>
 				<Text style={tw(`text-2xl font-bold mr-2`)}>{firstName}</Text>
 				<Text style={tw(`text-2xl font-bold`)}>{lastName}</Text>
@@ -24,7 +24,10 @@ const ContactCard = ({ contact }) => {
 				{phoneNumbers.map((phoneNumber) => (
 					<TouchableOpacity
 						onPress={() =>
-							Communications.phonecall(String(phoneNumber.number), true)
+							Communications.phonecall(
+								String(phoneNumber.number),
+								true
+							)
 						}>
 						<Text key={phoneNumber.id} style={tw(`text-gray-500`)}>
 							{phoneNumber.label}: {phoneNumber.number}
