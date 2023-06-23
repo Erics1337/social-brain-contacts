@@ -8,8 +8,10 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-async-storage/async-storage": "^1.18.2",
     "@react-navigation/native": "^6.0.6",
     "@react-navigation/native-stack": "^6.2.5",
+    "@types/react-native": "^0.72.2",
     "expo": "~44.0.0",
     "expo-app-auth": "~11.0.3",
     "expo-contacts": "12.0.1",

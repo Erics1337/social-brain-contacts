@@ -7,6 +7,7 @@ import {
 	SafeAreaView,
 	TouchableOpacity,
 	ScrollView,
+	Picker,
 } from 'react-native'
 import tw from 'tailwind-rn'
 import useAuth from '../hooks/useAuth'
@@ -30,6 +31,8 @@ import { db } from '../firebase'
 import * as Contacts from 'expo-contacts'
 import ContactCard from '../components/ContactCard'
 
+import useStore from '../store'
+
 function Home() {
 	const { user, logout } = useAuth()
 	const [profiles, setProfiles] = useState([])
@@ -37,7 +40,19 @@ function Home() {
 	const swipeRef = useRef(null)
 
 	let [error, setError] = useState(undefined)
-	let [contacts, setContacts] = useState(undefined)
+	// let [contacts, setContacts] = useState(undefined)
+
+	// const [selectedValue, setSelectedValue] = useState('family')
+	// const state = useStore()
+	const [setUser, binName, setBinName, contacts, setContacts] = useStore(
+		(state) => [
+			state.setUser,
+			state.binName,
+			state.setBinName,
+			state.contacts,
+			state.setContacts,
+		]
+	)
 
 	useLayoutEffect(() => {
 		navigation.setOptions({
@@ -60,6 +75,9 @@ function Home() {
 				})
 
 				if (data.length > 0) {
+					// sync contact id's and bins with firestore
+					// Set contacts to state
+					setUser(user)
 					setContacts(data)
 				} else {
 					setError('No contacts found')
@@ -70,23 +88,8 @@ function Home() {
 		})()
 	}, [])
 
-	let getContactData = (data, property) => {
-		if (data) {
-			return data.map((data, index) => {
-				return (
-					<View key={index}>
-						<Text>
-							{data.label}: {data[property]}
-						</Text>
-					</View>
-				)
-			})
-		}
-	}
-
 	let getContactRows = () => {
-		console.log(contacts)
-		if (contacts !== undefined) {
+		if (contacts) {
 			return contacts.map((contact, index) => {
 				return <ContactCard contact={contact} key={index} />
 			})
@@ -94,6 +97,8 @@ function Home() {
 			return <Text>Awaiting contacts...</Text>
 		}
 	}
+
+	console.log('user', user)
 
 	return (
 		<SafeAreaView style={tw('flex-1 relative')}>
@@ -110,10 +115,31 @@ function Home() {
 				)}
 			</View>
 			<View style={tw('flex-1 -mt-6')}>
+				<View>
+					<Picker
+						selectedValue={binName}
+						style={{ height: 80 }}
+						onValueChange={(itemValue, itemIndex) =>
+							setBinName(itemValue)
+						}>
+						<Picker.Item label='Loved' value='loved' />
+						<Picker.Item label='Family' value='family' />
+						<Picker.Item label='Friends' value='friends' />
+						<Picker.Item
+							label='Acquaintances'
+							value='acquaintances'
+						/>
+						<Picker.Item
+							label='Recognizable'
+							value='recognizable'
+						/>
+					</Picker>
+				</View>
 				<View
 					style={tw(
 						'flex-1 bg-white mt-24 items-center justify-center'
 					)}>
+					<Text>{binName}</Text>
 					<ScrollView>{getContactRows()}</ScrollView>
 					<Text>{error}</Text>
 					<StatusBar style='auto' />

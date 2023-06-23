@@ -12,6 +12,7 @@ Expo Client supports running any project that doesn't have custom native modules
   - Sign in to expo and the project will appear in the app.
   - Or point your phone's camera at the QR code in the terminal (press "c" to view it).
 
-## Libraries
-Need to use yarn because expo-contacts does not install with npm
+## Caveots
 
+- Need to use yarn to install packages because expo-contacts does not install with npm
+- Some functionality is not available through emulators including telprompt support
