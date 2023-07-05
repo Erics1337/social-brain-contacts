@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text } from 'react-native';
+import { Text } from 'react-native';
 import { Formik } from 'formik';
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 import { passwordResetSchema } from '../utils';
-import { Colors, auth } from '../config';
+import { auth } from '../config';
 import { View, TextInput, Button, FormErrorMessage } from '../components';
 
 export const ForgotPasswordScreen = ({ navigation }) => {
@@ -22,9 +22,9 @@ export const ForgotPasswordScreen = ({ navigation }) => {
   };
 
   return (
-    <View isSafe style={styles.container}>
-      <View style={styles.innerContainer}>
-        <Text style={styles.screenTitle}>Reset your password</Text>
+    <View isSafe className="flex-1 bg-white px-3">
+      <View className="items-center">
+        <Text className="text-2xl font-bold text-black pt-5">Reset your password</Text>
       </View>
       <Formik
         initialValues={{ email: '' }}
@@ -58,15 +58,15 @@ export const ForgotPasswordScreen = ({ navigation }) => {
               <FormErrorMessage error={errorState} visible={true} />
             ) : null}
             {/* Password Reset Send Email  button */}
-            <Button style={styles.button} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Send Reset Email</Text>
+            <Button className="w-full items-center justify-center mt-2 bg-orange-500 py-2 rounded-lg" onPress={handleSubmit}>
+              <Text className="text-lg text-white font-bold">Send Reset Email</Text>
             </Button>
           </>
         )}
       </Formik>
       {/* Button to navigate to Login screen */}
       <Button
-        style={styles.borderlessButtonContainer}
+        className="mt-4 items-center justify-center"
         borderless
         title={'Go back to Login'}
         onPress={() => navigation.navigate('Login')}
@@ -74,39 +74,3 @@ export const ForgotPasswordScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-    paddingHorizontal: 12
-  },
-  innercontainer: {
-    alignItems: 'center'
-  },
-  screenTitle: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: Colors.black,
-    paddingTop: 20
-  },
-  button: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-    backgroundColor: Colors.orange,
-    padding: 10,
-    borderRadius: 8
-  },
-  buttonText: {
-    fontSize: 20,
-    color: Colors.white,
-    fontWeight: '700'
-  },
-  borderlessButtonContainer: {
-    marginTop: 16,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});

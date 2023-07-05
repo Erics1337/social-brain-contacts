@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Text, StyleSheet } from 'react-native';
+import { Text } from 'react-native';
 import { Formik } from 'formik';
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -30,12 +30,12 @@ export const SignupScreen = ({ navigation }) => {
   };
 
   return (
-    <View isSafe style={styles.container}>
+    <View isSafe className="flex-1 bg-white px-3">
       <KeyboardAwareScrollView enableOnAndroid={true}>
         {/* LogoContainer: consits app logo and screen title */}
-        <View style={styles.logoContainer}>
+        <View className="items-center">
           <Logo uri={Images.logo} />
-          <Text style={styles.screenTitle}>Create a new account!</Text>
+          <Text className="text-2xl font-bold text-black pt-5">Create a new account!</Text>
         </View>
         {/* Formik Wrapper */}
         <Formik
@@ -111,15 +111,15 @@ export const SignupScreen = ({ navigation }) => {
                 <FormErrorMessage error={errorState} visible={true} />
               ) : null}
               {/* Signup button */}
-              <Button style={styles.button} onPress={handleSubmit}>
-                <Text style={styles.buttonText}>Signup</Text>
+              <Button className="w-full items-center justify-center mt-2 bg-orange-500 py-2 rounded-lg" onPress={handleSubmit}>
+                <Text className="text-lg text-white font-bold">Signup</Text>
               </Button>
             </>
           )}
         </Formik>
         {/* Button to navigate to Login screen */}
         <Button
-          style={styles.borderlessButtonContainer}
+          className="mt-4 items-center justify-center"
           borderless
           title={'Already have an account?'}
           onPress={() => navigation.navigate('Login')}
@@ -128,39 +128,3 @@ export const SignupScreen = ({ navigation }) => {
     </View>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: Colors.white,
-    paddingHorizontal: 12
-  },
-  logoContainer: {
-    alignItems: 'center'
-  },
-  screenTitle: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: Colors.black,
-    paddingTop: 20
-  },
-  button: {
-    width: '100%',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginTop: 8,
-    backgroundColor: Colors.orange,
-    padding: 10,
-    borderRadius: 8
-  },
-  buttonText: {
-    fontSize: 20,
-    color: Colors.white,
-    fontWeight: '700'
-  },
-  borderlessButtonContainer: {
-    marginTop: 16,
-    alignItems: 'center',
-    justifyContent: 'center'
-  }
-});

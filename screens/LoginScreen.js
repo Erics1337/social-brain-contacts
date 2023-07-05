@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { Text, StyleSheet } from 'react-native'
+import { Text } from 'react-native'
 import { Formik } from 'formik'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'

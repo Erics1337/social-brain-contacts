@@ -1,15 +1,8 @@
-import React from 'react';
-import { Image, StyleSheet } from 'react-native';
+import React from 'react'
+import { Image } from 'react-native'
 
-import { Images } from '../config';
+import { Images } from '../config'
 
 export const Logo = ({ uri }) => {
-  return <Image source={uri} style={styles.image} />;
-};
-
-const styles = StyleSheet.create({
-  image: {
-    width: 200,
-    height: 200
-  }
-});
+	return <Image source={uri} className='w-48 h-48' />
+}
