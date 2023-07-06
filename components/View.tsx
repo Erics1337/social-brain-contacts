@@ -1,8 +1,14 @@
-import React from 'react';
-import { View as RNView, StyleSheet } from 'react-native';
+import React, { ReactNode } from 'react';
+import { View as RNView, ViewStyle, StyleSheet } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-export const View = ({ isSafe, style, children }) => {
+interface ViewProps {
+  isSafe?: boolean;
+  style?: ViewStyle;
+  children?: ReactNode;
+}
+
+export const View: React.FC<ViewProps> = ({ isSafe, style, children }) => {
   const insets = useSafeAreaInsets();
 
   if (isSafe) {

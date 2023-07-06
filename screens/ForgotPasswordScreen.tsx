@@ -1,16 +1,31 @@
+import { StackNavigationProp, StackScreenProps } from '@react-navigation/stack';
+
 import React, { useState } from 'react';
 import { Text } from 'react-native';
-import { Formik } from 'formik';
+import { Formik, FormikValues } from 'formik';
+
 import { sendPasswordResetEmail } from 'firebase/auth';
 
 import { passwordResetSchema } from '../utils';
-import { auth } from '../config';
+import { Colors, auth } from '../config';
 import { View, TextInput, Button, FormErrorMessage } from '../components';
 
-export const ForgotPasswordScreen = ({ navigation }) => {
+
+type AuthStackParamList = {
+  Welcome: undefined;
+  Login: undefined;
+  Register: undefined;
+  ForgotPassword: undefined;
+};
+
+type Props = {
+  navigation: StackNavigationProp<AuthStackParamList, 'ForgotPassword'>;
+} & StackScreenProps<AuthStackParamList, 'ForgotPassword'>;
+
+const ForgotPasswordScreen: React.FC<Props> = ({ navigation }: Props) => {
   const [errorState, setErrorState] = useState('');
 
-  const handleSendPasswordResetEmail = values => {
+  const handleSendPasswordResetEmail = (values: FormikValues) => {
     const { email } = values;
 
     sendPasswordResetEmail(auth, email)
@@ -50,15 +65,14 @@ export const ForgotPasswordScreen = ({ navigation }) => {
               textContentType='emailAddress'
               value={values.email}
               onChangeText={handleChange('email')}
-              onBlur={handleBlur('email')}
-            />
+              onBlur={handleBlur('email')} rightIcon={undefined} handlePasswordVisibility={undefined}            />
             <FormErrorMessage error={errors.email} visible={touched.email} />
             {/* Display Screen Error Mesages */}
             {errorState !== '' ? (
               <FormErrorMessage error={errorState} visible={true} />
             ) : null}
             {/* Password Reset Send Email  button */}
-            <Button className="w-full items-center justify-center mt-2 bg-orange-500 py-2 rounded-lg" onPress={handleSubmit}>
+            <Button style={{backgroundColor: Colors.primary}} className="w-full items-center justify-center mt-2 py-2 rounded-lg" onPress={handleSubmit}>
               <Text className="text-lg text-white font-bold">Send Reset Email</Text>
             </Button>
           </>
@@ -74,3 +88,5 @@ export const ForgotPasswordScreen = ({ navigation }) => {
     </View>
   );
 };
+
+export default ForgotPasswordScreen;

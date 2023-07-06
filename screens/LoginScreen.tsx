@@ -1,27 +1,40 @@
+import { StackNavigationProp } from '@react-navigation/stack'
 import React, { useState } from 'react'
 import { Text } from 'react-native'
-import { Formik } from 'formik'
+import { Formik, FormikProps } from 'formik'
 import { signInWithEmailAndPassword } from 'firebase/auth'
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import { View, TextInput, Logo, Button, FormErrorMessage } from '../components'
 import { Images, Colors, auth } from '../config'
-import { useTogglePasswordVisibility } from '../hooks'
+import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibility'
+import { AuthStackParamList } from '../types'
 import { loginValidationSchema } from '../utils'
 
-export const LoginScreen = ({ navigation }) => {
+
+interface FormValues {
+	email: string
+	password: string
+}
+
+type Props = {
+	navigation: StackNavigationProp<AuthStackParamList, 'Login'>
+}
+
+const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [errorState, setErrorState] = useState('')
 	const { passwordVisibility, handlePasswordVisibility, rightIcon } =
 		useTogglePasswordVisibility()
 
-	const handleLogin = (values) => {
+	const handleLogin = (values: FormValues) => {
 		const { email, password } = values
 		signInWithEmailAndPassword(auth, email, password).catch((error) =>
 			setErrorState(error.message)
 		)
 	}
+
 	return (
-		<>
+		<React.Fragment>
 			<View className='flex-1 bg-white'>
 				<KeyboardAwareScrollView enableOnAndroid={true}>
 					{/* LogoContainer: consists app logo and screen title */}
@@ -37,7 +50,7 @@ export const LoginScreen = ({ navigation }) => {
 							password: '',
 						}}
 						validationSchema={loginValidationSchema}
-						onSubmit={(values) => handleLogin(values)}>
+						onSubmit={handleLogin}>
 						{({
 							values,
 							touched,
@@ -45,8 +58,8 @@ export const LoginScreen = ({ navigation }) => {
 							handleChange,
 							handleSubmit,
 							handleBlur,
-						}) => (
-							<>
+						}: FormikProps<FormValues>) => (
+							<React.Fragment>
 								{/* Input fields */}
 								<TextInput
 									name='email'
@@ -59,6 +72,8 @@ export const LoginScreen = ({ navigation }) => {
 									value={values.email}
 									onChangeText={handleChange('email')}
 									onBlur={handleBlur('email')}
+									rightIcon={undefined}
+									handlePasswordVisibility={undefined}
 								/>
 								<FormErrorMessage
 									error={errors.email}
@@ -93,13 +108,14 @@ export const LoginScreen = ({ navigation }) => {
 								)}
 								{/* Login button */}
 								<Button
-									className='w-full justify-center items-center mt-2 bg-orange-500 p-4 rounded'
+									style={{ backgroundColor: Colors.primary }}
+									className='w-full justify-center items-center mt-2 p-4 rounded'
 									onPress={handleSubmit}>
 									<Text className='text-white text-lg font-bold'>
 										Login
 									</Text>
 								</Button>
-							</>
+							</React.Fragment>
 						)}
 					</Formik>
 					{/* Button to navigate to SignupScreen to create a new account */}
@@ -117,6 +133,8 @@ export const LoginScreen = ({ navigation }) => {
 					/>
 				</KeyboardAwareScrollView>
 			</View>
-		</>
+		</React.Fragment>
 	)
 }
+
+export default LoginScreen

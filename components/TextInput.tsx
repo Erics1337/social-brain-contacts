@@ -1,12 +1,22 @@
-import React from 'react'
-import { TextInput as RNTextInput } from 'react-native'
+import React, { FC } from 'react'
+import {
+	TextInput as RNTextInput,
+	TextInputProps as RNTextInputProps,
+} from 'react-native'
 
 import { View } from './View'
 import { Icon } from './Icon'
 import { Button } from './Button'
 import { Colors } from '../config'
 
-export const TextInput = ({
+interface TextInputProps extends RNTextInputProps {
+	width?: string
+	leftIconName?: string
+	rightIcon?: string
+	handlePasswordVisibility?: () => void
+}
+
+export const TextInput: FC<TextInputProps> = ({
 	width = '100%',
 	leftIconName,
 	rightIcon,
@@ -41,3 +51,4 @@ export const TextInput = ({
 		</View>
 	)
 }
+
