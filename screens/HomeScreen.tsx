@@ -4,6 +4,7 @@ import { signOut } from 'firebase/auth'
 
 import { auth } from '../config'
 import ContactList from '../components/ContactComponents/ContactList'
+import CategoryPicker from '../components/CategoryPicker'
 
 const HomeScreen: React.FC = () => {
 	const handleLogout = () => {
@@ -13,6 +14,7 @@ const HomeScreen: React.FC = () => {
 	}
 	return (
 		<View className='flex-1'>
+      <CategoryPicker />
 			<ContactList />
 			<Button title='Sign Out' onPress={handleLogout} />
 		</View>
