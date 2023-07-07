@@ -8,5 +8,5 @@ interface LogoProps {
 }
 
 export const Logo: FC<LogoProps> = ({ uri }) => {
-	return <Image source={uri} style={{ width: 48, height: 48 }} />
+	return <Image source={uri} style={{ width: 250, height: 250 }} />
 }
