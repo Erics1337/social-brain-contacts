@@ -133,7 +133,8 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 							) : null}
 							{/* Signup button */}
 							<Button
-								className='w-full items-center justify-center mt-2 bg-orange-500 py-2 rounded-lg'
+								className='w-full items-center justify-center mt-2 py-2 rounded-lg'
+								style={{backgroundColor: Colors.primary}}
 								onPress={handleSubmit}>
 								<Text className='text-lg text-white font-bold'>
 									Signup
