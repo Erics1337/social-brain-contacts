@@ -1,40 +1,54 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { NavigationContainer } from '@react-navigation/native';
-import { onAuthStateChanged } from 'firebase/auth';
+import React, { useState, useContext, useEffect } from 'react'
+import { NavigationContainer } from '@react-navigation/native'
+import { onAuthStateChanged } from 'firebase/auth'
 
-import AuthStack from './AuthStack';
-import AppStack from './AppStack';
-import { AuthenticatedUserContext } from '../providers';
-import { LoadingIndicator } from '../components';
-import { auth } from '../config';
+import AuthStack from './AuthStack'
+import AppStack from './AppStack'
+import { AuthenticatedUserContext } from '../providers'
+import { LoadingIndicator } from '../components'
+import { auth } from '../config'
+import { syncContacts } from '../services/contacts'
 
 const RootNavigator = () => {
-  const { user, setUser } = useContext(AuthenticatedUserContext);
-  const [isLoading, setIsLoading] = useState(true);
+	const { user, setUser } = useContext(AuthenticatedUserContext)
+	const [isLoading, setIsLoading] = useState(true)
 
-  useEffect(() => {
-    // onAuthStateChanged returns an unsubscriber
-    const unsubscribeAuthStateChanged = onAuthStateChanged(
-      auth,
-      authenticatedUser => {
-        authenticatedUser ? setUser(authenticatedUser) : setUser(null);
-        setIsLoading(false);
-      }
-    );
+	useEffect(() => {
+		// Define your async function
+		const fetchAuthStateAndSyncContacts = async () => {
+			// onAuthStateChanged returns an unsubscriber
+			const unsubscribeAuthStateChanged = onAuthStateChanged(
+				auth,
+				(authenticatedUser) => {
+					authenticatedUser
+						? setUser(authenticatedUser)
+						: setUser(null)
+					setIsLoading(false)
+				}
+			)
 
-    // unsubscribe auth listener on unmount
-    return unsubscribeAuthStateChanged;
-  }, [user]);
+			if (user) {
+				// On user authentication, sync phone contacts to the Firestore database
+				await syncContacts(user.uid)
+			}
 
-  if (isLoading) {
-    return <LoadingIndicator />;
-  }
+			// This function should return the cleanup function
+			return unsubscribeAuthStateChanged
+		}
 
-  return (
-    <NavigationContainer>
-      {user ? <AppStack /> : <AuthStack />}
-    </NavigationContainer>
-  );
-};
+		// Call your async function
+		fetchAuthStateAndSyncContacts()
+	}, [user]) // Or [] if effect doesn't need props or state
 
-export default RootNavigator;
+	if (isLoading) {
+		return <LoadingIndicator />
+	}
+
+	return (
+		<NavigationContainer>
+			{user ? <AppStack /> : <AuthStack />}
+		</NavigationContainer>
+	)
+}
+
+export default RootNavigator

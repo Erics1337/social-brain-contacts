@@ -12,6 +12,8 @@ import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibilit
 import { signupValidationSchema } from '../utils'
 
 import { AuthStackParamList } from '../types'
+import { db } from '../config/firebase'
+import { doc, setDoc } from 'firebase/firestore'
 
 type Props = {
 	navigation: StackNavigationProp<AuthStackParamList, 'Signup'>
@@ -29,12 +31,31 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 		confirmPasswordVisibility,
 	} = useTogglePasswordVisibility()
 
-	const handleSignup = async (values: { email: any; password: any; confirmPassword?: string }) => {
+	const handleSignup = async (values: {
+		email: any
+		password: any
+		confirmPassword?: string
+	}) => {
 		const { email, password } = values
 
-		createUserWithEmailAndPassword(auth, email, password).catch((error) =>
+		try {
+			const { user } = await createUserWithEmailAndPassword(
+				auth,
+				email,
+				password
+			)
+
+			// At this point, the user has been created in the Authentication part of Firebase.
+			// Now, let's create a user document in the Firestore database.
+			if (user) {
+				const userDoc = doc(db, 'users', user.uid)
+				await setDoc(userDoc, {
+					email,
+				})
+			}
+		} catch (error: any) {
 			setErrorState(error.message)
-		)
+		}
 	}
 
 	return (
@@ -134,7 +155,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 							{/* Signup button */}
 							<Button
 								className='w-full items-center justify-center mt-2 py-2 rounded-lg'
-								style={{backgroundColor: Colors.primary}}
+								style={{ backgroundColor: Colors.primary }}
 								onPress={handleSubmit}>
 								<Text className='text-lg text-white font-bold'>
 									Signup
@@ -155,4 +176,4 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 	)
 }
 
-export default SignupScreen;
+export default SignupScreen
