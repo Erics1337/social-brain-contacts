@@ -1,21 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { FlatList, SafeAreaView } from 'react-native'
-import * as Contacts from 'expo-contacts'
-import { Contact as ExpoContact } from 'expo-contacts'
 import Contact from './Contact'
+import useStore from '../../store'
+import { LoadingIndicator } from '../LoadingIndicator'
 
 const ContactList = () => {
-	const [contacts, setContacts] = useState<ExpoContact[]>([])
+	const contacts = useStore.getState().contacts
 
-	useEffect(() => {
-		;(async () => {
-			const { status } = await Contacts.requestPermissionsAsync()
-			if (status === 'granted') {
-				const { data } = await Contacts.getContactsAsync()
-				setContacts(data)
-			}
-		})()
-	}, [])
+	console.log(contacts)
+
+	if (contacts == null) {
+		return <LoadingIndicator />
+	}
 
 	return (
 		<SafeAreaView className='flex bg-white'>
@@ -28,4 +24,4 @@ const ContactList = () => {
 	)
 }
 
-export default ContactList;
+export default ContactList

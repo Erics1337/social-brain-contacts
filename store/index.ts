@@ -1,14 +1,14 @@
 import { create } from 'zustand'
+import { Contact as ExpoContact } from 'expo-contacts'
 
-// import { syncContacts } from '../utilities'
 
 type State = {
 	user: object | null
 	binName: string | null
-	contacts: object | null
+	contacts: ExpoContact[] | null
 	setUser: (user: object) => void
 	setBinName: (binName: string) => void
-	setContacts: (contacts: object) => void
+	setContacts: (contacts: ExpoContact[]) => void
 }
 
 const useStore = create<State>((set) => ({
@@ -17,9 +17,8 @@ const useStore = create<State>((set) => ({
 	contacts: null,
 	setUser: (user) => set({ user }),
 	setBinName: (binName: string) => set(() => ({ binName})),
-	setContacts: (contacts: object) => {
+	setContacts: (contacts: ExpoContact[]) => {
 		set({ contacts })
-		// syncContacts()
 	},
 }))
 
