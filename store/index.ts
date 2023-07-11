@@ -1,9 +1,6 @@
 import { create } from 'zustand'
-import { Contact as ExpoContact } from 'expo-contacts'
+import { OverloadedExpoContact } from '../types'
 
-interface OverloadedExpoContact extends ExpoContact {
-	binName?: string
-}
 
 type State = {
 	user: object | null
@@ -37,13 +34,12 @@ const useStore = create<State>((set) => ({
 
 		const { binName, contacts } = useStore.getState()
 
-		// Filter the contacts based on the binName
-		if (contacts) {
-			const filteredContacts = contacts.filter(
-				(contact) => contact.binName === binName
-			)
-			set({ filteredContacts })
-		}
+		set({
+			filteredContacts:
+				binName !== 'Everyone' && contacts !== null
+					? contacts.filter((contact) => contact.binName === binName)
+					: contacts,
+		})
 	},
 }))
 

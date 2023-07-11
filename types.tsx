@@ -1,10 +1,16 @@
+import { Contact as ExpoContact } from 'expo-contacts'
+
 export type AppStackParamList = {
-  Home: undefined;
-};
+	Home: undefined
+}
 
 export type AuthStackParamList = {
-  Welcome: undefined;
-  Login: undefined;
-  Signup: undefined;
-  ForgotPassword: undefined;
-};
+	Welcome: undefined
+	Login: undefined
+	Signup: undefined
+	ForgotPassword: undefined
+}
+
+export interface OverloadedExpoContact extends ExpoContact {
+	binName?: string
+}
