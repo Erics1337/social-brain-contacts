@@ -2,7 +2,6 @@ import * as Contacts from 'expo-contacts'
 import { collection, doc, getDocs, setDoc, deleteDoc } from 'firebase/firestore'
 import { db } from '../config/firebase'
 import useStore from '../store'
-import { Contact as ExpoContact } from 'expo-contacts'
 
 export async function syncContacts(userId: any) {
 	const { status } = await Contacts.requestPermissionsAsync()

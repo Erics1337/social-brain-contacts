@@ -5,14 +5,11 @@ import useStore from '../../store'
 import { LoadingIndicator } from '../LoadingIndicator'
 
 const ContactList = () => {
-	const contacts = useStore.getState().contacts
+	const contacts = useStore((state) => state.contacts)
 
-	console.log(contacts)
-
-	if (contacts == null) {
+	if (contacts === null) {
 		return <LoadingIndicator />
 	}
-
 	return (
 		<SafeAreaView className='flex bg-white'>
 			<FlatList
