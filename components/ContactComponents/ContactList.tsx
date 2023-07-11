@@ -5,15 +5,15 @@ import useStore from '../../store'
 import { LoadingIndicator } from '../LoadingIndicator'
 
 const ContactList = () => {
-	const contacts = useStore((state) => state.contacts)
+	const { binName, setBinName, filteredContacts, contacts } = useStore()
 
-	if (contacts === null) {
+	if (filteredContacts === null) {
 		return <LoadingIndicator />
 	}
 	return (
 		<SafeAreaView className='flex bg-white'>
 			<FlatList
-				data={contacts}
+				data={filteredContacts}
 				keyExtractor={(item) => item.id}
 				renderItem={({ item }) => <Contact contact={item} />}
 			/>

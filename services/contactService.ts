@@ -1,5 +1,5 @@
 import * as Contacts from 'expo-contacts'
-import { collection, doc, getDocs, setDoc, deleteDoc } from 'firebase/firestore'
+import { collection, doc, getDocs, setDoc, deleteDoc, orderBy, query } from 'firebase/firestore'
 import { db } from '../config/firebase'
 import useStore from '../store'
 
@@ -45,8 +45,32 @@ export async function syncContacts(userId: any) {
 		} catch (err) {
 			console.log('error syncing contacts to firebase')
 		} finally {
-			// Set contacts to state
-			useStore.getState().setContacts(data)
+			// Set contacts from firebase to state (to include bin property changes)
+			const q = query(userContactsRef, orderBy("name"));
+			const snapshot = await getDocs(q)
+			const contacts = snapshot.docs.map((doc) => {
+				const data = doc.data()
+				// Transform the data into overloadedExpoContact type
+				return {
+					id: doc.id,  // Use the document ID as the contact ID
+					binName: data.bin,
+					contactType: data.contactType,
+					emails:
+						data.emails && data.emails.length > 0
+							? data.emails
+							: [],
+					firstName: data.firstName,
+					imageAvailable: data.imageAvailable,
+					lastName: data.lastName,
+					name: data.name,
+					phoneNumbers:
+						data.phoneNumbers && data.phoneNumbers.length > 0
+							? data.phoneNumbers
+							: [],
+				}
+			})
+
+			useStore.getState().setContacts(contacts)
 		}
 
 		// Deleting contacts that are not on the phone

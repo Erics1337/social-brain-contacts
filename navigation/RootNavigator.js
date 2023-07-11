@@ -7,7 +7,7 @@ import AppStack from './AppStack'
 import { AuthenticatedUserContext } from '../providers'
 import { LoadingIndicator } from '../components'
 import { auth } from '../config'
-import { syncContacts } from '../services/contacts'
+import { syncContacts } from '../services/contactService'
 
 const RootNavigator = () => {
 	const { user, setUser } = useContext(AuthenticatedUserContext)

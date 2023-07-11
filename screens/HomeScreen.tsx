@@ -12,9 +12,10 @@ const HomeScreen: React.FC = () => {
 			console.log('Error logging out: ', error)
 		)
 	}
+	
 	return (
 		<View className='flex-1'>
-      <CategoryPicker />
+			<CategoryPicker />
 			<ContactList />
 			<Button title='Sign Out' onPress={handleLogout} />
 		</View>
