@@ -1,33 +1,42 @@
-# expo-firebase-starter 🔥
+# Social Brain Contacts 🧠
 
 ![Supports Expo iOS](https://img.shields.io/badge/iOS-4630EB.svg?style=flat-square&logo=APPLE&labelColor=999999&logoColor=fff)
 ![Supports Expo Android](https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff)
 [![runs with Expo Go](https://img.shields.io/badge/Runs%20with%20Expo%20Go-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://expo.dev/client)
 
-Is a quicker way to start with Expo + Firebase (using JS SDK) projects. It includes:
+'Social Brain Contacts' is a react-native expo app that utilizes research in social brain theory to provide tools to users to group their phone contacts into bins. This app aims to help users manage and understand their social relationships better.
 
-- based on Expo SDK `46`
-- navigation using `react-navigation` 6.x.x
-- Firebase JS SDK v9
-- Firebase as the backend for email auth
-- custom and reusable components
-- custom hook to toggle password field visibility on a TextInput
-- handles server errors using Formik
+## About Social Brain Theory
+
+Social Brain Theory suggests that human social networks have a layered structure where each individual has around 5 intimate relationships (e.g. romantic partners, best friends), 15 best friends, 50 good friends, 150 friends, and so on. These layers, sometimes referred to as 'Dunbar's Numbers', are thought to be cognitively constrained by the size of our brains. 'Social Brain Contacts' takes this research into account to provide users with tools to sort their contacts, helping them manage and reflect upon their social relationships.
+
+## Key Features
+
+- Built with TypeScript for type safety and easier debugging.
+- Styled with Nativewind for a flexible, Tailwind-like styling solution.
+- State managed by Zustand for an easy-to-use and efficient state management.
+- Based on Expo SDK `46`
+- Navigation using `react-navigation` 6.x.x
+- Firebase JS SDK v9 for backend email authentication
+- Custom and reusable components for ease of modifications and scalability
+- Custom hook to toggle password field visibility on a TextInput for added user convenience
+- Handles server errors using Formik for robust error management
 - Login, Signup & Password Reset form built using Formik & yup
-- show/hide Password Field's visibility 👁
-- uses a custom Provider using Context API & Firebase's `onAuthStateChanged` handler to check the user's auth state with
-- handles Forgot Password Reset using Firebase email method
-- uses [Expo Vector Icons](https://icons.expo.fyi/)
-- uses [KeyboardAwareScrollView](https://github.com/APSL/react-native-keyboard-aware-scroll-view) package to handle keyboard appearance and automatically scrolls to focused TextInput
-- uses `dotenv` and `expo-constants` packages to manage environment variables (so that they are not exposed on public repositories)
-- all components are now functional components and use [React Hooks](https://reactjs.org/docs/hooks-intro.html)
+- Show/hide Password Field's visibility 👁
+- Uses a custom Provider using Context API & Firebase's `onAuthStateChanged` handler to check the user's auth state
+- Handles Forgot Password Reset using Firebase email method for user-friendly password resets
+- Uses [Expo Vector Icons](https://icons.expo.fyi/) for visually appealing UI elements
+- Uses [KeyboardAwareScrollView](https://github.com/APSL/react-native-keyboard-aware-scroll-view) package to handle keyboard appearance and automatically scrolls to focused TextInput for seamless user interaction
+- Uses `dotenv` and `expo-constants` packages to manage environment variables securely
+- All components are functional components and use [React Hooks](https://reactjs.org/docs/hooks-intro.html) for concise and readable code
+
 
 ## Installation
 
-1. Create a new project using the firebase starter template.
+1. Create a new project using the Social Brain Contacts template.
 
 ```bash
-npx create-react-native-app --template https://github.com/expo-community/expo-firebase-starter
+npx create-react-native-app --template https://github.com/erics1337/social-brain-contacts
 ```
 
 2. Rename the file `example.env` to `.env`
@@ -49,57 +58,20 @@ APP_ID=XXXX
 - `yarn ios` -- open on iOS
 - `yarn android` -- open on Android
 
-## File Structure
-
-```shell
-Expo Firebase Starter
-├── assets ➡️ All static assets, includes app logo
-├── components ➡️ All re-suable UI components for form screens
-│   └── Button.js ➡️ Custom Button component using Pressable, comes with two variants and handles opacity
-│   └── TextInput.js ➡️ Custom TextInput component that supports left and right cons
-│   └── Icon.js ➡️ Icon component
-│   └── FormErrorMessage.js ➡️ Component to display server errors from Firebase
-│   └── LoadingIndicator.js ➡️ Loading indicator component
-│   └── Logo.js ➡️ Logo component
-│   └── View.js ➡️ Custom View component that supports safe area views
-├── hooks ➡️ All custom hook components
-│   └── useTogglePasswordVisibility.js ➡️ A custom hook that toggles password visibility on a TextInput component on a confirm password field
-├── config ➡️ All configuration files
-│   └── firebase.js ➡️ Configuration file to initialize firebase with firebaseConfig and auth
-│   └── images.js ➡️ Require image assets, reusable values across the app
-│   └── theme.js ➡️ Default set of colors, reusable values across the app
-├── providers ➡️ All custom providers that use React Context API
-│   └── AuthenticatedUserProvider.js ➡️ An Auth User Context component that shares Firebase user object when logged-in
-├── navigation
-│   └── AppStack.js ➡️ Protected routes such as Home screen
-│   └── AuthStack.js ➡️ Routes such as Login screen, when the user is not authenticated
-│   └── RootNavigator.js ➡️ Switch between Auth screens and App screens based on Firebase user logged-in state
-├── screens
-│   └── ForgotPassword.js ➡️ Forgot Password screen component
-│   └── HomeScreen.js ➡️ Protected route/screen component
-│   └── LoginScreen.js ➡️ Login screen component
-│   └── SignupScreen.js ➡️ Signup screen component
-├── App.js ➡️ Entry Point for Mobile apps, wrap all providers here
-├── app.config.js ➡️ Expo config file
-└── babel.config.js ➡️ Babel config (should be using `babel-preset-expo`)
-```
-
-## Screens
+<!-- ## Screens
 
 Main screens:
 
 - Login
 - Signup
 - Forgot password
-- Home (Bare Minimum) with a logout button
+- Home
 
-![Login screen with validation](https://i.imgur.com/cydaOYN.png)
+[Add Screenshots of 'Social Brain Contacts' here] -->
 
-![Successful Signup](https://i.imgur.com/62kcirI.png)
+## Related Repositories
 
-![Forgot Password](https://i.imgur.com/9J9a4Nl.png)
-
-![Validation on Signup screens](https://i.imgur.com/DG0wTjG.png)
+- [Social Brain Network](https://github.com/Erics1337/social-brain-network)
 
 ## ⚠️ Please Note
 
@@ -109,4 +81,4 @@ Expo uses Firebase Web SDK and does not support all Firebase services such as ph
 
 ---
 
-<strong>Built with 💜 by [@amanhimself](https://twitter.com/amanhimself)</strong>
+<strong>🌟 Built by [Eric Swanson]('https://ericsdevportfolio.com')</strong> using [Expo-firebase-starter](https://github.com/expo-community/expo-firebase-starter)
