@@ -8,9 +8,10 @@ import { AuthenticatedUserContext } from '../providers'
 import { LoadingIndicator } from '../components'
 import { auth } from '../config'
 import { syncContacts } from '../services/contactService'
+import useStore from '../store';
 
 const RootNavigator = () => {
-	const { user, setUser } = useContext(AuthenticatedUserContext)
+	const { user, setUser } = useStore()
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {

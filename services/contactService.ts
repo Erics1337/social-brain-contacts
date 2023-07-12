@@ -1,9 +1,18 @@
 import * as Contacts from 'expo-contacts'
-import { collection, doc, getDocs, setDoc, deleteDoc, orderBy, query } from 'firebase/firestore'
+import {
+	collection,
+	doc,
+	getDocs,
+	setDoc,
+	deleteDoc,
+	orderBy,
+	query,
+	updateDoc,
+} from 'firebase/firestore'
 import { db } from '../config/firebase'
 import useStore from '../store'
 
-export async function syncContacts(userId: any) {
+export async function syncContacts(userId: string) {
 	const { status } = await Contacts.requestPermissionsAsync()
 
 	if (status === 'granted') {
@@ -39,20 +48,20 @@ export async function syncContacts(userId: any) {
 					},
 					{ merge: true }
 				).then(() => {
-					console.log('contact updated successfully')
+					console.log('contact updated in firebase successfully')
 				})
 			}
 		} catch (err) {
 			console.log('error syncing contacts to firebase')
 		} finally {
 			// Set contacts from firebase to state (to include bin property changes)
-			const q = query(userContactsRef, orderBy("name"));
+			const q = query(userContactsRef, orderBy('name'))
 			const snapshot = await getDocs(q)
 			const contacts = snapshot.docs.map((doc) => {
 				const data = doc.data()
 				// Transform the data into overloadedExpoContact type
 				return {
-					id: doc.id,  // Use the document ID as the contact ID
+					id: doc.id, // Use the document ID as the contact ID
 					binName: data.bin,
 					contactType: data.contactType,
 					emails:
