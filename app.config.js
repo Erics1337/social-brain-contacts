@@ -2,8 +2,8 @@ import 'dotenv/config';
 
 export default {
   expo: {
-    name: 'Expo Firebase Starter',
-    slug: 'expo-firebase',
+    name: 'Social Brain Contacts',
+    slug: 'social-brain-contacts',
     privacy: 'public',
     platforms: ['ios', 'android'],
     version: '0.15.0',
