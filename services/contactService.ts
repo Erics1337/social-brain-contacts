@@ -20,7 +20,7 @@ export async function syncContacts(userId: string) {
 
 		// Assuming each user has a unique ID
 		const userContactsRef = collection(db, 'users', userId, 'contacts')
-
+		console.log('Adding contacts to firestore');
 		try {
 			// Loop through each contact and add/update it in Firestore
 			for (let contact of data) {
@@ -81,7 +81,7 @@ export async function syncContacts(userId: string) {
 
 			useStore.getState().setContacts(contacts)
 		}
-
+		console.log('Deleting contacts from firebase that are not on the phone');
 		// Deleting contacts that are not on the phone
 		const phoneContactIds = data.map((c) => c.id)
 		const snapshot = await getDocs(userContactsRef)

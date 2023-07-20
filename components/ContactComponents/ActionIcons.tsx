@@ -6,25 +6,31 @@ type ActionIconsProps = {
 	onCall: () => void
 	onText: () => void
 	onEmail: () => void
+	callDisabled: boolean
+	emailDisabled: boolean
+	textDisabled: boolean
 }
 
 const ActionIcons: React.FC<ActionIconsProps> = ({
 	onCall,
 	onText,
 	onEmail,
+	callDisabled,
+	emailDisabled,
+	textDisabled,
 }) => {
 	return (
 		<View className='flex flex-row'>
-			<TouchableOpacity onPress={onCall}>
+			<TouchableOpacity onPress={callDisabled ? onCall : () => {console.log('calling disabled');}}>
 				<MaterialIcons name='call' size={24} color='black' />
 			</TouchableOpacity>
-			<TouchableOpacity onPress={onText}>
+			<TouchableOpacity onPress={textDisabled ? onText : () => {console.log('texting disabled');}}>
 				<MaterialIcons name='message' size={24} color='black' />
 			</TouchableOpacity>
-			<TouchableOpacity onPress={onEmail}>
+			<TouchableOpacity onPress={emailDisabled ? onEmail : () => {console.log('email disabled')}}>
 				<MaterialIcons name='email' size={24} color='black' />
 			</TouchableOpacity>
 		</View>
 	)
 }
-export default ActionIcons;
+export default ActionIcons

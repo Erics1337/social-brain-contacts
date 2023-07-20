@@ -7,7 +7,7 @@ import AppStack from './AppStack'
 import { LoadingIndicator } from '../components'
 import { auth } from '../config'
 import { syncContacts } from '../services/contactService'
-import useStore from '../store';
+import useStore from '../store'
 
 const RootNavigator = () => {
 	const { user, setUser } = useStore()
@@ -23,15 +23,15 @@ const RootNavigator = () => {
 					authenticatedUser
 						? setUser(authenticatedUser)
 						: setUser(null)
-            setIsLoading(false)
-          }
-          )
-          
-          // Wait until user is stored in state
-          if (user) {
-            // On user authentication, sync phone contacts to the Firestore database
-            await syncContacts(user.uid)
-          }
+					setIsLoading(false)
+				}
+			)
+
+			// Wait until user is stored in state
+			if (user) {
+				// On user authentication, sync phone contacts to the Firestore database
+				await syncContacts(user.uid)
+			}
 
 			// This function should return the cleanup function
 			return unsubscribeAuthStateChanged

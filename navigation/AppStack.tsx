@@ -8,7 +8,7 @@ const Stack = createStackNavigator<AppStackParamList>();
 
 const AppStack: React.FC = () => {
   return (
-    <Stack.Navigator screenOptions={{ headerShown: true }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
       <Stack.Screen name="Home" component={HomeScreen} />
     </Stack.Navigator>
   );

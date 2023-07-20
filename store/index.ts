@@ -9,7 +9,7 @@ type State = {
 	binName: string | null
 	contacts: OverloadedExpoContact[] | null
 	filteredContacts: OverloadedExpoContact[] | null
-	setUser: (user: User) => void
+	setUser: (user: User | null) => void
 	setBinName: (binName: string) => void
 	setContacts: (contacts: OverloadedExpoContact[]) => void
 	setFilteredContacts: () => void
@@ -28,7 +28,7 @@ const useStore = create<State>((set) => ({
 	},
 	setContacts: (contacts) => {
 		// Contacts should be sorted by name from the firebase query fired on Auth load by RootNavigator
-		console.log('Setting contacts')
+		console.log('Setting contacts to state')
 		set({ contacts })
 		set({ filteredContacts: contacts })
 	},

@@ -11,6 +11,7 @@ import Avatar from './Avatar'
 import ActionIcons from './ActionIcons'
 import { OverloadedExpoContact } from '../../types'
 import useStore from '../../store'
+import { openURL, canOpenURL } from 'expo-linking'
 
 type ContactProps = {
 	contact: OverloadedExpoContact
@@ -24,18 +25,48 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 	const [showModal, setShowModal] = useState(false)
 	const [selectedLabel, setSelectedLabel] = useState('')
 
-	const { updateContact } = useStore() // Replace with your actual Zustand store and update function
+	const { updateContact } = useStore()
 
+	const [canOpenEmail, setCanOpenEmail] = useState(false)
+	const [canOpenTelephone, setCanOpenTelephone] = useState(false)
+	const [canOpenSMS, setCanOpenSMS] = useState(false)
+
+	canOpenURL('mailto: chelsea@tripwiretech.com').then((canOpen) => {
+		setCanOpenEmail(canOpen)
+	})
+
+	// Check for valid contact info on load
+	if (contact?.phoneNumbers?.[0]?.number) {
+		canOpenURL(`tel://+1${contact.phoneNumbers[0].number}`).then(
+			(canOpen) => {
+				setCanOpenTelephone(canOpen)
+				setCanOpenSMS(canOpen)
+			}
+		)
+	}
+	if (contact?.emails?.[0]?.email) {
+		canOpenURL(`tel://+1${contact.emails[0].email}`).then((canOpen) => {
+			setCanOpenEmail(canOpen)
+		})
+	}
+
+	// Handlers
 	const handleCall = () => {
-		// TODO: Implement call action
+		if (contact?.phoneNumbers?.[0]?.number) {
+			openURL(`tel://+1${contact.phoneNumbers[0].number}`)
+		}
 	}
 
 	const handleText = () => {
-		// TODO: Implement text action
+		if (contact?.phoneNumbers?.[0]?.number) {
+			openURL(`sms://+1${contact.phoneNumbers[0].number}`)
+		}
 	}
 
 	const handleEmail = () => {
-		// TODO: Implement email action
+		if (contact?.emails?.[0]?.email) {
+			openURL(`mailto:${contact.emails[0].email}`)
+		}
 	}
 
 	const handleLongPress = () => {
@@ -61,6 +92,9 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 					onCall={handleCall}
 					onText={handleText}
 					onEmail={handleEmail}
+					callDisabled={canOpenTelephone}
+					emailDisabled={canOpenEmail}
+					textDisabled={canOpenSMS}
 				/>
 				{showModal && (
 					<Modal
