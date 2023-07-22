@@ -3,11 +3,11 @@ import {Picker} from '@react-native-picker/picker';
 import useStore from '../store';
 
 const CategoryPicker: React.FC = () => {
-	const { binName, setBinName, setFilteredContacts } = useStore()
+	const { binName, setBinName, setBinnedContacts } = useStore()
 
 	const handlePickerOptionChange = (option: string) => {
 		setBinName(option)
-		setFilteredContacts()
+		setBinnedContacts()
 	}
 
 	return (
