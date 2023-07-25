@@ -10,7 +10,11 @@ import { auth } from '../config'
 const Stack = createStackNavigator<AppStackParamList>()
 
 const handleLogout = () => {
-	signOut(auth).catch((error) => console.log('Error logging out: ', error))
+	try {
+		signOut(auth)
+	} catch (error) {
+		console.log('Error logging out: ', error)
+	}
 }
 
 const AppStack: React.FC = () => {
@@ -21,7 +25,7 @@ const AppStack: React.FC = () => {
 				component={HomeScreen}
 				options={{
 					headerLeft: (props) => (
-						<View style={{ padding: 10, marginBottom: 10 }} >
+						<View style={{ padding: 10, marginBottom: 10 }}>
 							<Image
 								style={{ width: 50, height: 50 }}
 								source={require('../assets/logo.png')} // Replace './path-to-your-logo.png' with the path to your logo

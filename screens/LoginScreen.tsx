@@ -11,7 +11,6 @@ import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibilit
 import { AuthStackParamList } from '../types'
 import { loginValidationSchema } from '../utils'
 
-
 interface FormValues {
 	email: string
 	password: string
@@ -28,9 +27,11 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 
 	const handleLogin = (values: FormValues) => {
 		const { email, password } = values
-		signInWithEmailAndPassword(auth, email, password).catch((error) =>
+		try {
+			signInWithEmailAndPassword(auth, email, password)
+		} catch (error: any) {
 			setErrorState(error.message)
-		)
+		}
 	}
 
 	return (

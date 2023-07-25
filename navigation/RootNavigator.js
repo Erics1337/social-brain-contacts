@@ -14,32 +14,30 @@ const RootNavigator = () => {
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
-		// Define your async function
-		const fetchAuthStateAndSyncContacts = async () => {
-			// onAuthStateChanged returns an unsubscriber
-			const unsubscribeAuthStateChanged = onAuthStateChanged(
-				auth,
-				(authenticatedUser) => {
-					authenticatedUser
-						? setUser(authenticatedUser)
-						: setUser(null)
-					setIsLoading(false)
-				}
-			)
+		const unsubscribeAuthStateChanged = onAuthStateChanged(
+			auth,
+			(authenticatedUser) => {
+				authenticatedUser ? setUser(authenticatedUser) : setUser(null)
+				setIsLoading(false)
+			}
+		)
 
-			// Wait until user is stored in state
+		// Cleanup function
+		return unsubscribeAuthStateChanged
+	}, [])
+
+	useEffect(() => {
+		const syncPhoneContacts = async (userId) => {
 			if (user) {
 				// On user authentication, sync phone contacts to the Firestore database
-				await syncContacts(user.uid)
+				await syncContacts(userId)
 			}
-
-			// This function should return the cleanup function
-			return unsubscribeAuthStateChanged
 		}
 
-		// Call your async function
-		fetchAuthStateAndSyncContacts()
-	}, [user]) // Or [] if effect doesn't need props or state
+		if (user) {
+			syncPhoneContacts(user.uid)
+		}
+	}, [user])
 
 	if (isLoading) {
 		return <LoadingIndicator />
