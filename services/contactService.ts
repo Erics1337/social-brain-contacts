@@ -12,23 +12,20 @@ import {
 import { db } from '../config/firebase'
 import useStore from '../store'
 
+
+
 export async function syncContacts(userId: string) {
 	const { status } = await Contacts.requestPermissionsAsync()
 
 	if (status === 'granted') {
 		const { data } = await Contacts.getContactsAsync()
 
-		// Assuming each user has a unique ID
 		const userContactsRef = collection(db, 'users', userId, 'contacts')
-		console.log('Adding contacts to firestore');
+		console.log('Adding contacts to firestore')
 		try {
-			// Loop through each contact and add/update it in Firestore
-			for (let contact of data) {
-				// To simplify, we're using the contact's ID as the Firestore document ID
+			const promises = data.map((contact) => {
 				const contactRef = doc(userContactsRef, contact.id)
-				// These are fields that are available on ios
-				// We check if the array is undefined and has at least one element
-				await setDoc(
+				return setDoc(
 					contactRef,
 					{
 						contactType: contact.contactType,
@@ -47,21 +44,28 @@ export async function syncContacts(userId: string) {
 								: [],
 					},
 					{ merge: true }
-				).then(() => {
-					console.log('contact updated in firebase successfully')
-				})
-			}
+				)
+			})
+
+			await Promise.all(promises)
+			console.log('All contacts updated in firebase successfully')
 		} catch (err) {
 			console.log('error syncing contacts to firebase')
-		} finally {
-			// Set contacts from firebase to state (to include bin property changes)
+		}
+
+		try {
 			const q = query(userContactsRef, orderBy('name'))
+
+			console.log('getting contacts from firebase')
+
 			const snapshot = await getDocs(q)
-			const contacts = snapshot.docs.map((doc) => {
+			console.log(
+				'transforming contact docs to overloadedExpoContact type'
+			)
+			const firebaseContacts = snapshot.docs.map((doc) => {
 				const data = doc.data()
-				// Transform the data into overloadedExpoContact type
 				return {
-					id: doc.id, // Use the document ID as the contact ID
+					id: doc.id,
 					binName: data.bin,
 					contactType: data.contactType,
 					emails:
@@ -78,17 +82,25 @@ export async function syncContacts(userId: string) {
 							: [],
 				}
 			})
-
-			useStore.getState().setContacts(contacts)
+			console.log('firebaseContacts: ', firebaseContacts);
+			useStore.getState().setContacts(firebaseContacts)
+		} catch (error) {
+			console.log('error getting contacts from firebase', error)
 		}
-		console.log('Deleting contacts from firebase that are not on the phone');
-		// Deleting contacts that are not on the phone
-		const phoneContactIds = data.map((c) => c.id)
-		const snapshot = await getDocs(userContactsRef)
-		snapshot.forEach((doc) => {
-			if (!phoneContactIds.includes(doc.id)) {
-				deleteDoc(doc.ref)
-			}
-		})
+
+		try {
+			console.log(
+				'Deleting contacts from firebase that are not on the phone'
+			)
+			const phoneContactIds = data.map((c) => c.id)
+			const snapshot = await getDocs(userContactsRef)
+			snapshot.forEach((doc) => {
+				if (!phoneContactIds.includes(doc.id)) {
+					deleteDoc(doc.ref)
+				}
+			})
+		} catch (error) {
+			console.log(error)
+		}
 	}
 }
