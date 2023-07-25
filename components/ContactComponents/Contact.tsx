@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import {
 	Text,
 	View,
@@ -11,7 +11,7 @@ import Avatar from './Avatar'
 import ActionIcons from './ActionIcons'
 import { OverloadedExpoContact } from '../../types'
 import useStore from '../../store'
-import { openURL, canOpenURL } from 'expo-linking'
+import { openURL } from 'expo-linking'
 
 type ContactProps = {
 	contact: OverloadedExpoContact
@@ -26,29 +26,6 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 	const [selectedLabel, setSelectedLabel] = useState('')
 
 	const { updateContact } = useStore()
-
-	const [canOpenEmail, setCanOpenEmail] = useState(false)
-	const [canOpenTelephone, setCanOpenTelephone] = useState(false)
-	const [canOpenSMS, setCanOpenSMS] = useState(false)
-
-	canOpenURL('mailto: chelsea@tripwiretech.com').then((canOpen) => {
-		setCanOpenEmail(canOpen)
-	})
-
-	// Check for valid contact info on load
-	if (contact?.phoneNumbers?.[0]?.number) {
-		canOpenURL(`tel://+1${contact.phoneNumbers[0].number}`).then(
-			(canOpen) => {
-				setCanOpenTelephone(canOpen)
-				setCanOpenSMS(canOpen)
-			}
-		)
-	}
-	if (contact?.emails?.[0]?.email) {
-		canOpenURL(`tel://+1${contact.emails[0].email}`).then((canOpen) => {
-			setCanOpenEmail(canOpen)
-		})
-	}
 
 	// Handlers
 	const handleCall = () => {
@@ -92,9 +69,9 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 					onCall={handleCall}
 					onText={handleText}
 					onEmail={handleEmail}
-					callDisabled={canOpenTelephone}
-					emailDisabled={canOpenEmail}
-					textDisabled={canOpenSMS}
+					callDisabled={false}
+					emailDisabled={false}
+					textDisabled={false}
 				/>
 				{showModal && (
 					<Modal
