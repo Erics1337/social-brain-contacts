@@ -43,4 +43,4 @@ Temporary Items
 node_modules
 
 # Ios App Store
-/eas.json
+eas.json
