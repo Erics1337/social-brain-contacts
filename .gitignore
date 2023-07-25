@@ -41,3 +41,6 @@ Temporary Items
 # Project related
 .env
 node_modules
+
+# Ios App Store
+/eas.json
