@@ -44,3 +44,7 @@ node_modules
 
 # Ios App Store
 eas.json
+/ios
+
+# Android
+/android
