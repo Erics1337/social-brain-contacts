@@ -6,6 +6,8 @@ import { AppStackParamList } from '../types'
 import { Button, Image, View } from 'react-native'
 import { signOut } from 'firebase/auth'
 import { auth } from '../config'
+import 'react-native-gesture-handler';
+
 
 const Stack = createStackNavigator<AppStackParamList>()
 

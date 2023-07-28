@@ -5,6 +5,8 @@ import ForgotPasswordScreen from '../screens/ForgotPasswordScreen';
 import LoginScreen from '../screens/LoginScreen';
 import SignupScreen from '../screens/SignupScreen';
 import { AuthStackParamList } from '../types';
+import 'react-native-gesture-handler';
+
 
 const Stack = createStackNavigator<AuthStackParamList>();
 
