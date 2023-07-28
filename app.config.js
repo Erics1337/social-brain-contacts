@@ -6,7 +6,7 @@ export default {
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.0',
+		version: '1.0.3',
 		orientation: 'portrait',
 		icon: './assets/logo.png',
 		splash: {
@@ -20,8 +20,15 @@ export default {
 		assetBundlePatterns: ['**/*'],
 		ios: {
 			supportsTablet: true,
-      bundleIdentifier: 'com.socialbrain.social-brain-contacts',
-      buildNumber: '1'
+			bundleIdentifier: 'com.socialbrain.social-brain-contacts',
+			buildNumber: '1',
+		},
+		android: {
+			package: 'com.socialbrain.socialbraincontacts',
+			adaptiveIcon: {
+				foregroundImage: './assets/icon.png',
+				backgroundColor: '#68c7ac',
+			},
 		},
 		extra: {
 			eas: {
