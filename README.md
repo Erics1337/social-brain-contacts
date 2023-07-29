@@ -15,14 +15,12 @@ Social Brain Theory suggests that human social networks have a layered structure
 - Built with TypeScript for type safety and easier debugging.
 - Styled with Nativewind for a flexible, Tailwind-like styling solution.
 - State managed by Zustand for an easy-to-use and efficient state management.
-- Based on Expo SDK `46`
-- Navigation using `react-navigation` 6.x.x
+- Based on Expo SDK `48`
 - Firebase JS SDK v9 for backend email authentication
 - Custom and reusable components for ease of modifications and scalability
 - Custom hook to toggle password field visibility on a TextInput for added user convenience
 - Handles server errors using Formik for robust error management
 - Login, Signup & Password Reset form built using Formik & yup
-- Show/hide Password Field's visibility 👁
 - Uses a custom Provider using Context API & Firebase's `onAuthStateChanged` handler to check the user's auth state
 - Handles Forgot Password Reset using Firebase email method for user-friendly password resets
 - Uses [Expo Vector Icons](https://icons.expo.fyi/) for visually appealing UI elements
@@ -73,12 +71,5 @@ Main screens:
 
 - [Social Brain Network](https://github.com/Erics1337/social-brain-network)
 
-## ⚠️ Please Note
-
-Expo uses Firebase Web SDK and does not support all Firebase services such as phone auth. If you are looking forward to use those services, please use `react-native-firebase` in a Expo bare project, or an [Expo custom dev client](https://blog.expo.dev/introducing-custom-development-clients-5a2c79a9ddf8) or a plain React Native project.
-
-[**Here is more on what and why Expo cannot support complete Firebase integration**](https://expo.canny.io/feature-requests/p/full-native-firebase-integration)
-
----
 
 <strong>🌟 Built by [Eric Swanson]('https://ericsdevportfolio.com')</strong> using [Expo-firebase-starter](https://github.com/expo-community/expo-firebase-starter)
