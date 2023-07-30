@@ -24,7 +24,7 @@
     "expo-linking": "~4.0.1",
     "expo-splash-screen": "~0.18.2",
     "expo-status-bar": "~1.4.4",
-    "firebase": "9.6.11",
+    "firebase": "^10.1.0",
     "formik": "^2.4.2",
     "nativewind": "^2.0.11",
     "postcss": "8.4.23",
