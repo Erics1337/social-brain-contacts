@@ -6,7 +6,7 @@ export default {
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.3',
+		version: '1.0.17',
 		orientation: 'portrait',
 		icon: './assets/logo.png',
 		splash: {
