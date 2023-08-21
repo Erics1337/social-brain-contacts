@@ -6,7 +6,7 @@ export default {
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.3',
+		version: '1.0.24',
 		orientation: 'portrait',
 		icon: './assets/logo.png',
 		splash: {
@@ -32,7 +32,7 @@ export default {
 		},
 		extra: {
 			eas: {
-				projectId: '2adf681e-1e41-46b9-86c0-99a551bd1eb8',
+				projectId: 'a970fc0a-a63e-4fad-b845-7ce7dd42ab06',
 			},
 			apiKey: process.env.API_KEY,
 			authDomain: process.env.AUTH_DOMAIN,
