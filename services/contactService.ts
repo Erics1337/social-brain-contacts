@@ -12,8 +12,6 @@ import {
 import { db } from '../config/firebase'
 import useStore from '../store'
 
-
-
 export async function syncContacts(userId: string) {
 	const { status } = await Contacts.requestPermissionsAsync()
 
@@ -82,25 +80,35 @@ export async function syncContacts(userId: string) {
 							: [],
 				}
 			})
-			console.log('firebaseContacts: ', firebaseContacts);
-			useStore.getState().setContacts(firebaseContacts)
-		} catch (error) {
-			console.log('error getting contacts from firebase', error)
-		}
-
-		try {
-			console.log(
-				'Deleting contacts from firebase that are not on the phone'
-			)
+			console.log('firebaseContacts: ', firebaseContacts)
+			// Delete contacts from firestore that are not on the phone
+			console.log('Deleting contacts from firebase that are not on the phone')
 			const phoneContactIds = data.map((c) => c.id)
-			const snapshot = await getDocs(userContactsRef)
 			snapshot.forEach((doc) => {
 				if (!phoneContactIds.includes(doc.id)) {
 					deleteDoc(doc.ref)
 				}
 			})
+
+			// Re-fetch the contacts from firestore after deletion
+			const updatedSnapshot = await getDocs(userContactsRef)
+			const updatedFirebaseContacts = updatedSnapshot.docs.map((doc) => {
+				const data = doc.data()
+				return {
+					id: doc.id,
+					binName: data.bin,
+					contactType: data.contactType,
+					emails: data.emails && data.emails.length > 0 ? data.emails : [],
+					firstName: data.firstName,
+					imageAvailable: data.imageAvailable,
+					lastName: data.lastName,
+					name: data.name,
+					phoneNumbers: data.phoneNumbers && data.phoneNumbers.length > 0 ? data.phoneNumbers : [],
+				}
+			})
+			useStore.getState().setContacts(updatedFirebaseContacts)
 		} catch (error) {
-			console.log(error)
+			console.log('error getting contacts from firebase', error)
 		}
 	}
 }
