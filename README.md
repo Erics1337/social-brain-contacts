@@ -15,9 +15,10 @@ Social Brain Theory suggests that human social networks have a layered structure
 - Built with TypeScript for type safety and easier debugging.
 - Styled with Nativewind for a flexible, Tailwind-like styling solution.
 - State managed by Zustand for an easy-to-use and efficient state management.
-- Based on Expo SDK `48`
+- Based on Expo SDK `49`
 - Firebase JS SDK v9 for backend email authentication
 - Custom and reusable components for ease of modifications and scalability
+- Call, Text and Email linking with expo linking library
 - Custom hook to toggle password field visibility on a TextInput for added user convenience
 - Handles server errors using Formik for robust error management
 - Login, Signup & Password Reset form built using Formik & yup

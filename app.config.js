@@ -18,6 +18,9 @@ export default {
 			fallbackToCacheTimeout: 0,
 		},
 		assetBundlePatterns: ['**/*'],
+		web: {
+			bundler: 'metro',
+		},
 		ios: {
 			supportsTablet: true,
 			bundleIdentifier: 'com.socialbrain.social-brain-contacts',
