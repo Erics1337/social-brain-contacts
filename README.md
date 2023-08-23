@@ -22,7 +22,7 @@ Social Brain Theory suggests that human social networks have a layered structure
 - Custom hook to toggle password field visibility on a TextInput for added user convenience
 - Handles server errors using Formik for robust error management
 - Login, Signup & Password Reset form built using Formik & yup
-- Uses a custom Provider using Context API & Firebase's `onAuthStateChanged` handler to check the user's auth state
+- Uses a custom Provider using global store & Firebase's `onAuthStateChanged` handler to check the user's auth state
 - Handles Forgot Password Reset using Firebase email method for user-friendly password resets
 - Uses [Expo Vector Icons](https://icons.expo.fyi/) for visually appealing UI elements
 - Uses [KeyboardAwareScrollView](https://github.com/APSL/react-native-keyboard-aware-scroll-view) package to handle keyboard appearance and automatically scrolls to focused TextInput for seamless user interaction
