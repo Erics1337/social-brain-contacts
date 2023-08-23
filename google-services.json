@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "social-brain-contacts-396803",
+  "private_key_id": "ca059884165c039fff139defdcb516a27e1d8fda",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQC0ZwGJbPrr+GXa\n6cYhty5S3hSeAHI2MVnWObN74Rql/gh6nGS7quNVc0BdTi9uOi/NXfEKM42WCkSz\nDevQMjKDNaZl6Y8EZB8bFlihjJlDb6B37rL8BNpwE//kDHXXUzcRTgiRXl/WhZaP\n3qOqZqiWVcy4doCrNMAkF4vd9250W/cB8X9kE3j2XUhgyXuRT74BcWVAF6ZDgL2r\nWHmw31Osq8jp629gIBAKI43oTRjLs6PjUd/j0mLx64Z42Les2gusXT7BLVEGqtvm\nKzDgfSfdxKag5YZCdE+ebXDJsTbmUhVJhil8khp5EBnpeoUV8omF2XSaUJlToUVl\n7rsWc6mTAgMBAAECggEACu0KJmNkg97uQrOFF0AO6ca4toqnk1yqm9NKAycZBBPX\n057RNje28p/uUAUonjzSVFY4mQbFfOBv7lNzhFwZIkht8YVgIg+MsSLjVbVvbhDx\n33gKr9swMTi+dynCB7tRSuNpy9QZaqN6NCOmnSIzWuRYNJVvKYjvJVoMhvIxzSsC\nqoBZ3aUi23/G3Wa8z4rZae1ITNz2BDMGta6swVvvFxR6gI5b8VSmFtPMT7WJKmBi\n/1Inqxds+UR6KlJ7W7zqxRAvLuhkGV7p3ewaB5u2O4dncSTT0QgXkCdcvbI7Hzrf\n97J44HSPNlsM96itep93uF+blOAtUKZD2l9JYsP3oQKBgQDfyzIczY3JwMLtBfLy\n6kK6MvCwUichs9MC+IiPpSsJ03XMKu7XEOl2D+yjuWhN6jqEzITKYovEreoNFdIw\n9rU3MAT4Fji6pq4cYS1Et3gtl9MeVSetH9R2ycst5759mc6VB6j+547Z/XURtxPo\ncTtf/SgdLUfXSL0jV73NtgoCawKBgQDOXTmlo5A0IniWuAxjQJMhyUW3ZZBccmhF\ntR9Eucz5f2hmJOnIB/iKopwMp/oFHSyeAvBxFlJNAb0XvS0DOjcWqRh1yHiCI2yV\nNRhyVPihXlIjJ9aaw2G2FvrZA5qymabfAS8kqnzcw31N1VD/ItyFuQf57R1Bbz/J\n/UVmtEzPeQKBgH+fo15lotxRf1goMlpxWchR0Izc7M/9evKQxWAVsyuRWfYq7bXc\nQSdBAZSE4YS9dM3SzE+WT1rES1tW/F1L9CAa1FqeYY+gCl7I1EYB0xk9IfqEWXIT\nWti7T5FIPYvnMLYwfiGP8BlEv4RwwXunR1MATeYFspiFNMd4/BbaH28tAoGAeGbC\nBJdawmA+VUmKyLnbXkINcARM5vNFTS5w0OtK4WLpqXbuA2xLIa/gNi4nXKZ56rMy\nT/jDCfTyu4//XDux+oGsKMRPMzax2phA7CwRaC0c5TAQMPm/37qmnslQj9XAG6qY\nM99YvIE+cZP9Du7rFQYw1iv2/r+GyzX/MP4PNpkCgYAV1pDFIh9/ewnbwji/LCUj\n/8jvAbwlV0U2jwA/Bv6Ji1aVjaIvSMbIXkn+01SuHYIgLrFUBB6eumOVzkt36E/x\nV+N67OEXswORrRA0p//Ixr1DhjanB86iCbv01WPBeFJydbX4lngwx+iu432iNhDg\ngukuc02+MlCIAJlsFy7MBg==\n-----END PRIVATE KEY-----\n",
+  "client_email": "social-brain-contacts@social-brain-contacts-396803.iam.gserviceaccount.com",
+  "client_id": "106174215398146046202",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/social-brain-contacts%40social-brain-contacts-396803.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
