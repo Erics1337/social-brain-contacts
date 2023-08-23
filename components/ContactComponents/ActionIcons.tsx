@@ -21,16 +21,23 @@ const ActionIcons: React.FC<ActionIconsProps> = ({
 }) => {
 	return (
 		<View className='flex flex-row'>
-			<TouchableOpacity onPress={callDisabled ? onCall : () => {console.log('calling disabled');}}>
-				<MaterialIcons name='call' size={24} color='black' />
-			</TouchableOpacity>
-			<TouchableOpacity onPress={textDisabled ? onText : () => {console.log('texting disabled');}}>
-				<MaterialIcons name='message' size={24} color='black' />
-			</TouchableOpacity>
-			<TouchableOpacity onPress={emailDisabled ? onEmail : () => {console.log('email disabled')}}>
-				<MaterialIcons name='email' size={24} color='black' />
-			</TouchableOpacity>
+			{!callDisabled && (
+				<TouchableOpacity onPress={onCall}>
+					<MaterialIcons name='call' size={24} color='black' />
+				</TouchableOpacity>
+			)}
+			{!textDisabled && (
+				<TouchableOpacity onPress={onText}>
+					<MaterialIcons name='message' size={24} color='black' />
+				</TouchableOpacity>
+			)}
+			{!emailDisabled && (
+				<TouchableOpacity onPress={onEmail}>
+					<MaterialIcons name='email' size={24} color='black' />
+				</TouchableOpacity>
+			)}
 		</View>
 	)
 }
+
 export default ActionIcons
