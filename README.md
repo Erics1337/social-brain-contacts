@@ -37,8 +37,7 @@ Social Brain Theory suggests that human social networks have a layered structure
 npx create-react-native-app --template https://github.com/erics1337/social-brain-contacts
 ```
 
-2. Rename the file `example.env` to `.env`
-3. Update `.env` with your own configuration, e.g.:
+2. create a `.env` file with your own configuration, e.g.:
 
 ```shell
 # Rename this file to ".env" before use
