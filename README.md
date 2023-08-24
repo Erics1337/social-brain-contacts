@@ -27,7 +27,6 @@ Social Brain Theory suggests that human social networks have a layered structure
 - Uses [Expo Vector Icons](https://icons.expo.fyi/) for visually appealing UI elements
 - Uses [KeyboardAwareScrollView](https://github.com/APSL/react-native-keyboard-aware-scroll-view) package to handle keyboard appearance and automatically scrolls to focused TextInput for seamless user interaction
 - Uses `dotenv` and `expo-constants` packages to manage environment variables securely
-- All components are functional components and use [React Hooks](https://reactjs.org/docs/hooks-intro.html) for concise and readable code
 
 
 ## Installation
