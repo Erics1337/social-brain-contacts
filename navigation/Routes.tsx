@@ -28,7 +28,7 @@ const Routes: React.FC = () => {
 	}, [])
 
 	useEffect(() => {
-		const syncPhoneContacts = async (userId) => {
+		const syncPhoneContacts = async (userId: string) => {
 			// On user authentication, sync phone contacts to the Firestore database
 			await syncContacts(userId)
 		}
