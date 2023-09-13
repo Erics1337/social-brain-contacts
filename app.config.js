@@ -6,7 +6,7 @@ export default {
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.24',
+		version: '1.0.26',
 		orientation: 'portrait',
 		icon: './assets/logo.png',
 		splash: {
@@ -44,5 +44,14 @@ export default {
 			messagingSenderId: process.env.MESSAGING_SENDER_ID,
 			appId: process.env.APP_ID,
 		},
+		plugins: [
+			[
+				'expo-contacts',
+				{
+					contactsPermission:
+					'Allow Social Brain Contacts to access your contacts to group them into categories based on social brain theory. For example, you can organize your contacts into close friends, acquaintances, and distant connections.'
+				},
+			],
+		],
 	},
 }
