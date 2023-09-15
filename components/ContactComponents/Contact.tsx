@@ -21,7 +21,24 @@ type ContactProps = {
 const Contact: React.FC<ContactProps> = ({ contact }) => {
 	const firstName = contact.firstName ?? ''
 	const lastName = contact.lastName ?? ''
-	const initials = firstName[0] + lastName[0]
+
+	const getInitials = (firstName: string, lastName: string) => {
+		let firstInitial = ''
+		let lastInitial = ''
+		if (
+			firstName &&
+			typeof firstName === 'string' &&
+			firstName.length > 0
+		) {
+			firstInitial = firstName[0]
+		}
+		if (lastName && typeof lastName === 'string' && lastName.length > 0) {
+			lastInitial = lastName[0]
+		}
+		return firstInitial + lastInitial
+	}
+
+	const initials = getInitials(firstName, lastName)
 
 	const [showModal, setShowModal] = useState(false)
 
