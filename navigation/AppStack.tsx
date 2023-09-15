@@ -6,8 +6,8 @@ import { AppStackParamList } from '../types'
 import { Button, Image, View } from 'react-native'
 import { signOut } from 'firebase/auth'
 import { auth } from '../config'
-import 'react-native-gesture-handler';
-
+import 'react-native-gesture-handler'
+import useStore from '../store'
 
 const Stack = createStackNavigator<AppStackParamList>()
 
@@ -20,6 +20,8 @@ const handleLogout = () => {
 }
 
 const AppStack: React.FC = () => {
+	const { showSearchBox, setShowSearchBox } = useStore()
+
 	return (
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			<Stack.Screen
@@ -30,24 +32,32 @@ const AppStack: React.FC = () => {
 						<View style={{ padding: 10, marginBottom: 10 }}>
 							<Image
 								style={{ width: 50, height: 50 }}
-								source={require('../assets/logo.png')} // Replace './path-to-your-logo.png' with the path to your logo
+								source={require('../assets/logo.png')}
 							/>
 						</View>
 					),
 					headerTitle: (props) => null,
 					headerRight: () => (
-						<Button
-							title='Sign Out'
-							onPress={handleLogout}
-							color='#000'
-						/>
+						<View style={{ flexDirection: 'row', marginRight: 10 }}>
+							<Button
+								title='Search'
+								onPress={() => setShowSearchBox(!showSearchBox)}
+							/>
+							<View style={{ width: 10 }} />
+							{/* This provides a margin between the buttons */}
+							<Button
+								title='Sign Out'
+								onPress={handleLogout}
+								color='#000'
+							/>
+						</View>
 					),
 					headerStyle: {
-						backgroundColor: '#fff', // This is equivalent to 'bg-white'
+						backgroundColor: '#fff',
 					},
-					headerTintColor: '#000', // This is equivalent to 'text-black'
+					headerTintColor: '#000',
 					headerTitleStyle: {
-						fontWeight: 'bold', // This is equivalent to 'font-bold'
+						fontWeight: 'bold',
 					},
 				}}
 			/>

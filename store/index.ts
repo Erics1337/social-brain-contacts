@@ -10,12 +10,14 @@ type State = {
 	searchTerm: string | null
 	contacts: OverloadedExpoContact[] | null
 	binnedContacts: OverloadedExpoContact[] | null
+	showSearchBox: boolean | null
 	setUser: (user: User | null) => void
 	setBinName: (binName: string) => void
 	setSearchTerm: (searchTerm: string) => void
 	setContacts: (contacts: OverloadedExpoContact[]) => void
 	setBinnedContacts: () => void
 	updateContact: (contactId: string, binName: string) => void
+	setShowSearchBox: (showSearchBox: boolean) => void
 }
 
 const useStore = create<State>((set) => ({
@@ -24,6 +26,7 @@ const useStore = create<State>((set) => ({
 	searchTerm: null,
 	contacts: null,
 	binnedContacts: null,
+	showSearchBox: false,
 	setUser: (user) => set({ user }),
 	setBinName: (binName) => {
 		set({ binName })
@@ -65,6 +68,8 @@ const useStore = create<State>((set) => ({
 		// Update firebase
 		updateContactInFirebase(contactId, binName)
 	},
+	setShowSearchBox: (showSearchBox) => set({ showSearchBox }),
+
 }))
 
 const updateContactInFirebase = (contactId: string, binName: string) => {

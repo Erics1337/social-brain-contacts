@@ -1,5 +1,12 @@
 import React, { useEffect, useState, useMemo } from 'react'
-import { FlatList, SafeAreaView, Text, TextInput, View } from 'react-native'
+import {
+	FlatList,
+	SafeAreaView,
+	Text,
+	TextInput,
+	View,
+	Button,
+} from 'react-native'
 import Contact from './Contact'
 import useStore from '../../store'
 import { LoadingIndicator } from '../LoadingIndicator'
@@ -10,14 +17,14 @@ interface SearchBoxProps {
 
 const SearchBox: React.FC<SearchBoxProps> = ({ onChange }) => (
 	<TextInput
-		style={{ height: 40, borderColor: 'gray', borderWidth: 1 }}
+		className='h-10 border-b border-gray-400'
 		onChangeText={onChange}
 		placeholder='Search Contact'
 	/>
 )
 
 const ContactList: React.FC = () => {
-	const { binnedContacts, setBinnedContacts } = useStore()
+	const { binnedContacts, showSearchBox } = useStore()
 	const [searchTerm, setSearchTerm] = useState('')
 
 	const filteredContacts = useMemo(() => {
@@ -30,22 +37,23 @@ const ContactList: React.FC = () => {
 			  )
 	}, [binnedContacts, searchTerm])
 
-	if (filteredContacts === null) {
+	if (!binnedContacts) {
 		return <LoadingIndicator />
 	}
 
 	return (
-		<SafeAreaView className='flex bg-white'>
-			<SearchBox onChange={setSearchTerm} />
+		<SafeAreaView className='flex-1 bg-white'>
+			{showSearchBox && <SearchBox onChange={setSearchTerm} />}
 			{filteredContacts.length > 0 ? (
 				<FlatList
 					data={filteredContacts}
 					keyExtractor={(item) => item.id}
 					renderItem={({ item }) => <Contact contact={item} />}
+					showsVerticalScrollIndicator={true}
 				/>
 			) : (
-				<View className='bg-gray-100 py-5'>
-					<Text className='flex-1 m-auto text-xl'>
+				<View className='bg-gray-100 py-5 flex-1 justify-center'>
+					<Text className='text-center text-xl'>
 						No Contacts in this group yet
 					</Text>
 				</View>
