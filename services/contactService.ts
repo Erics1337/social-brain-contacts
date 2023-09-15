@@ -74,8 +74,6 @@ export async function syncContacts(userId: string) {
 				}
 			})
 
-			console.log('firebaseContacts: ', firebaseContacts)
-
 			const deleteBatch = writeBatch(db)
 
 			const phoneContactIds = data.map((c) => c.id)
