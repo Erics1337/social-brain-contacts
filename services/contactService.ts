@@ -3,11 +3,9 @@ import {
 	collection,
 	doc,
 	getDocs,
-	setDoc,
-	deleteDoc,
+	writeBatch,
 	orderBy,
 	query,
-	updateDoc,
 } from 'firebase/firestore'
 import { db } from '../config/firebase'
 import useStore from '../store'
@@ -20,30 +18,32 @@ export async function syncContacts(userId: string) {
 
 		const userContactsRef = collection(db, 'users', userId, 'contacts')
 		console.log('Adding contacts to firestore')
+
+		const batch = writeBatch(db)
+
+		data.forEach((contact) => {
+			const contactRef = doc(userContactsRef, contact.id)
+			const sanitizedContact = {
+				contactType: contact.contactType || 'defaultContactType',
+				emails:
+					contact.emails && contact.emails.length > 0
+						? contact.emails
+						: [],
+				firstName: contact.firstName || '',
+				imageAvailable: contact.imageAvailable || false,
+				lastName: contact.lastName || '',
+				name: contact.name || 'Unknown Name',
+				phoneNumbers:
+					contact.phoneNumbers && contact.phoneNumbers.length > 0
+						? contact.phoneNumbers
+						: [],
+			}
+
+			batch.set(contactRef, sanitizedContact, { merge: true })
+		})
+
 		try {
-			const promises = data.map((contact) => {
-				const contactRef = doc(userContactsRef, contact.id)
-				// Firestore does not support 'undefined' type
-				const sanitizedContact = {
-					contactType: contact.contactType || 'defaultContactType',
-					emails:
-						contact.emails && contact.emails.length > 0
-							? contact.emails
-							: [],
-					firstName: contact.firstName || '',
-					imageAvailable: contact.imageAvailable || false,
-					lastName: contact.lastName || '',
-					name: contact.name || 'Unknown Name',
-					phoneNumbers:
-						contact.phoneNumbers && contact.phoneNumbers.length > 0
-							? contact.phoneNumbers
-							: [],
-				}
-
-				return setDoc(contactRef, sanitizedContact, { merge: true })
-			})
-
-			await Promise.all(promises)
+			await batch.commit()
 			console.log('All contacts updated in firebase successfully')
 		} catch (err) {
 			console.log('error syncing contacts to firebase', err)
@@ -51,13 +51,8 @@ export async function syncContacts(userId: string) {
 
 		try {
 			const q = query(userContactsRef, orderBy('name'))
-
-			console.log('getting contacts from firebase')
-
 			const snapshot = await getDocs(q)
-			console.log(
-				'transforming contact docs to overloadedExpoContact type'
-			)
+
 			const firebaseContacts = snapshot.docs.map((doc) => {
 				const data = doc.data()
 				return {
@@ -78,19 +73,20 @@ export async function syncContacts(userId: string) {
 							: [],
 				}
 			})
+
 			console.log('firebaseContacts: ', firebaseContacts)
-			// Delete contacts from firestore that are not on the phone
-			console.log(
-				'Deleting contacts from firebase that are not on the phone'
-			)
+
+			const deleteBatch = writeBatch(db)
+
 			const phoneContactIds = data.map((c) => c.id)
-			snapshot.forEach((doc) => {
+			snapshot.docs.forEach((doc) => {
 				if (!phoneContactIds.includes(doc.id)) {
-					deleteDoc(doc.ref)
+					deleteBatch.delete(doc.ref)
 				}
 			})
 
-			// Re-fetch the contacts from firestore after deletion
+			await deleteBatch.commit()
+
 			const updatedSnapshot = await getDocs(userContactsRef)
 			const updatedFirebaseContacts = updatedSnapshot.docs.map((doc) => {
 				const data = doc.data()
@@ -112,6 +108,7 @@ export async function syncContacts(userId: string) {
 							: [],
 				}
 			})
+
 			useStore.getState().setContacts(updatedFirebaseContacts)
 		} catch (error) {
 			console.log('error getting contacts from firebase', error)
