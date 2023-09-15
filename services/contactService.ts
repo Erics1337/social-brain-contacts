@@ -23,32 +23,30 @@ export async function syncContacts(userId: string) {
 		try {
 			const promises = data.map((contact) => {
 				const contactRef = doc(userContactsRef, contact.id)
-				return setDoc(
-					contactRef,
-					{
-						contactType: contact.contactType,
-						emails:
-							contact.emails && contact.emails.length > 0
-								? contact.emails
-								: [],
-						firstName: contact.firstName,
-						imageAvailable: contact.imageAvailable,
-						lastName: contact.lastName,
-						name: contact.name,
-						phoneNumbers:
-							contact.phoneNumbers &&
-							contact.phoneNumbers.length > 0
-								? contact.phoneNumbers
-								: [],
-					},
-					{ merge: true }
-				)
+				// Firestore does not support 'undefined' type
+				const sanitizedContact = {
+					contactType: contact.contactType || 'defaultContactType',
+					emails:
+						contact.emails && contact.emails.length > 0
+							? contact.emails
+							: [],
+					firstName: contact.firstName || '',
+					imageAvailable: contact.imageAvailable || false,
+					lastName: contact.lastName || '',
+					name: contact.name || 'Unknown Name',
+					phoneNumbers:
+						contact.phoneNumbers && contact.phoneNumbers.length > 0
+							? contact.phoneNumbers
+							: [],
+				}
+
+				return setDoc(contactRef, sanitizedContact, { merge: true })
 			})
 
 			await Promise.all(promises)
 			console.log('All contacts updated in firebase successfully')
 		} catch (err) {
-			console.log('error syncing contacts to firebase')
+			console.log('error syncing contacts to firebase', err)
 		}
 
 		try {
@@ -82,7 +80,9 @@ export async function syncContacts(userId: string) {
 			})
 			console.log('firebaseContacts: ', firebaseContacts)
 			// Delete contacts from firestore that are not on the phone
-			console.log('Deleting contacts from firebase that are not on the phone')
+			console.log(
+				'Deleting contacts from firebase that are not on the phone'
+			)
 			const phoneContactIds = data.map((c) => c.id)
 			snapshot.forEach((doc) => {
 				if (!phoneContactIds.includes(doc.id)) {
@@ -98,12 +98,18 @@ export async function syncContacts(userId: string) {
 					id: doc.id,
 					binName: data.bin,
 					contactType: data.contactType,
-					emails: data.emails && data.emails.length > 0 ? data.emails : [],
+					emails:
+						data.emails && data.emails.length > 0
+							? data.emails
+							: [],
 					firstName: data.firstName,
 					imageAvailable: data.imageAvailable,
 					lastName: data.lastName,
 					name: data.name,
-					phoneNumbers: data.phoneNumbers && data.phoneNumbers.length > 0 ? data.phoneNumbers : [],
+					phoneNumbers:
+						data.phoneNumbers && data.phoneNumbers.length > 0
+							? data.phoneNumbers
+							: [],
 				}
 			})
 			useStore.getState().setContacts(updatedFirebaseContacts)
