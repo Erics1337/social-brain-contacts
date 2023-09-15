@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useMemo } from 'react'
 import { FlatList, SafeAreaView, Text, TextInput, View } from 'react-native'
 import Contact from './Contact'
 import useStore from '../../store'
@@ -19,18 +19,15 @@ const SearchBox: React.FC<SearchBoxProps> = ({ onChange }) => (
 const ContactList: React.FC = () => {
 	const { binnedContacts, setBinnedContacts } = useStore()
 	const [searchTerm, setSearchTerm] = useState('')
-	const [filteredContacts, setFilteredContacts] = useState(binnedContacts)
 
-	useEffect(() => {
-		if (!binnedContacts) return
+	const filteredContacts = useMemo(() => {
+		if (!binnedContacts) return []
 
-		setFilteredContacts(
-			searchTerm === ''
-				? binnedContacts
-				: binnedContacts.filter((contact) =>
-						contact.name.includes(searchTerm)
-				  )
-		)
+		return searchTerm === ''
+			? binnedContacts
+			: binnedContacts.filter((contact) =>
+					contact.name.includes(searchTerm)
+			  )
 	}, [binnedContacts, searchTerm])
 
 	if (filteredContacts === null) {
