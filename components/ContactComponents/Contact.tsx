@@ -78,27 +78,29 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 	}
 
 	return (
-		<TouchableWithoutFeedback onLongPress={handleLongPress}>
-			<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
-				<Avatar initials={initials} />
-				<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName}`}</Text>
-				<ActionIcons
-					onCall={handleCall}
-					onText={handleText}
-					onEmail={handleEmail}
-					callDisabled={false}
-					emailDisabled={!contact?.emails?.length}
-					textDisabled={false}
-				/>
-				{showModal && (
-					<CategoriesModal
-						contact={contact}
-						showModal={showModal}
-						setShowModal={setShowModal}
+		<TouchableOpacity activeOpacity={0.5} onLongPress={handleLongPress}>
+				<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
+					<Avatar initials={initials} />
+					<View className='flex-1 mx-3'>
+					<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName}`}</Text>
+					</View>
+					<ActionIcons
+						onCall={handleCall}
+						onText={handleText}
+						onEmail={handleEmail}
+						callDisabled={false}
+						emailDisabled={!contact?.emails?.length}
+						textDisabled={false}
 					/>
-				)}
-			</View>
-		</TouchableWithoutFeedback>
+					{showModal && (
+						<CategoriesModal
+							contact={contact}
+							showModal={showModal}
+							setShowModal={setShowModal}
+						/>
+					)}
+				</View>
+		</TouchableOpacity>
 	)
 }
 
