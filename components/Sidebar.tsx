@@ -3,12 +3,13 @@ import { View, Text, TouchableOpacity, Animated, Button } from 'react-native';
 import useStore from '../store';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config';
+import DeleteUserModal from './DeleteUserModal';
 
 const Sidebar: React.FC = () => {
     const slideAnim = useRef(new Animated.Value(-500)).current;
     const accountSlideAnim = useRef(new Animated.Value(-500)).current;
 
-    const { sidebarVisible, toggleSidebar, toggleShowSearchBox } = useStore();
+    const { sidebarVisible, toggleSidebar, toggleShowSearchBox, toggleAccountDeleteModal } = useStore();
     const [showAccountSidebar, setShowAccountSidebar] = useState(false);
 
     const handleLogout = () => {
@@ -18,7 +19,7 @@ const Sidebar: React.FC = () => {
             console.log('Error logging out: ', error)
         }
     }
-    
+
     useEffect(() => {
         Animated.spring(slideAnim, {
             toValue: sidebarVisible && !showAccountSidebar ? 0 : -500,
@@ -39,6 +40,7 @@ const Sidebar: React.FC = () => {
 
     return (
         <>
+            <DeleteUserModal/>
             {/* Main Sidebar */}
             <Animated.View
                 style={{
@@ -55,7 +57,7 @@ const Sidebar: React.FC = () => {
                     <Text style={{ fontSize: 24 }}>X</Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'column' }}>
-                    <Button title='Search' onPress={() => toggleShowSearchBox} />
+                    <Button title='Search' onPress={() => toggleShowSearchBox()} />
                     <Button title='Account' onPress={() => setShowAccountSidebar(true)} />
                     <Button title='Sign Out' onPress={handleLogout} color='#000' />
                 </View>
@@ -77,7 +79,7 @@ const Sidebar: React.FC = () => {
                     <Text style={{ fontSize: 24 }}>&larr;</Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'column' }}>
-                    <Button title='Delete Account' onPress={() => console.log('Delete Account')} />
+                    <Button title='Delete Account' onPress={() => toggleAccountDeleteModal()} />
                     <Button title='Other Option' onPress={() => console.log('Other Option')} />
                 </View>
             </Animated.View>
