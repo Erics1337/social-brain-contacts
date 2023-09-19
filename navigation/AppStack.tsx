@@ -4,25 +4,21 @@ import React from 'react'
 import HomeScreen from '../screens/HomeScreen'
 import { AppStackParamList } from '../types'
 import { Button, Image, View } from 'react-native'
-import { signOut } from 'firebase/auth'
-import { auth } from '../config'
+
 import 'react-native-gesture-handler'
 import useStore from '../store'
+import Sidebar from '../components/Sidebar';
 
 const Stack = createStackNavigator<AppStackParamList>()
 
-const handleLogout = () => {
-	try {
-		signOut(auth)
-	} catch (error) {
-		console.log('Error logging out: ', error)
-	}
-}
+
 
 const AppStack: React.FC = () => {
-	const { showSearchBox, setShowSearchBox } = useStore()
+    const { sidebarVisible, toggleSidebar } = useStore();
 
 	return (
+		<>
+		<Sidebar />
 		<Stack.Navigator screenOptions={{ headerShown: true }}>
 			<Stack.Screen
 				name='Home'
@@ -40,16 +36,10 @@ const AppStack: React.FC = () => {
 					headerRight: () => (
 						<View style={{ flexDirection: 'row', marginRight: 10 }}>
 							<Button
-								title='Search'
-								onPress={() => setShowSearchBox(!showSearchBox)}
+								title='☰'
+								onPress={toggleSidebar}
 							/>
 							<View style={{ width: 10 }} />
-							{/* This provides a margin between the buttons */}
-							<Button
-								title='Sign Out'
-								onPress={handleLogout}
-								color='#000'
-							/>
 						</View>
 					),
 					headerStyle: {
@@ -62,6 +52,7 @@ const AppStack: React.FC = () => {
 				}}
 			/>
 		</Stack.Navigator>
+		</>
 	)
 }
 
