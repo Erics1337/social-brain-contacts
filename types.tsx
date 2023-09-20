@@ -12,5 +12,5 @@ export type AuthStackParamList = {
 }
 
 export interface OverloadedExpoContact extends ExpoContact {
-	binName?: string
+	bin?: string
 }

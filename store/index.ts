@@ -6,7 +6,7 @@ import { db } from '../config/firebase'
 
 type State = {
 	user: User | null
-	binName: string | null
+	binOption: string | null
 	searchTerm: string | null
 	contacts: OverloadedExpoContact[] | null
 	binnedContacts: OverloadedExpoContact[] | null
@@ -14,11 +14,11 @@ type State = {
 	sidebarVisible: boolean | null
 	showAccountDeleteModal: boolean | null
 	setUser: (user: User | null) => void
-	setBinName: (binName: string) => void
+	setBin: (bin: string) => void
 	setSearchTerm: (searchTerm: string) => void
 	setContacts: (contacts: OverloadedExpoContact[]) => void
 	setBinnedContacts: () => void
-	updateContact: (contactId: string, binName: string) => void
+	updateContact: (contactId: string, bin: string) => void
 	toggleShowSearchBox: () => void
 	toggleSidebar: () => void
 	toggleAccountDeleteModal: () => void
@@ -26,15 +26,16 @@ type State = {
 
 const useStore = create<State>((set) => ({
 	user: null,
-	binName: 'Everyone',
+	binOption: 'Everyone',
 	searchTerm: null,
 	contacts: null,
 	binnedContacts: null,
+	sidebarVisible: false,
 	showSearchBox: false,
 	showAccountDeleteModal: false,
 	setUser: (user) => set({ user }),
-	setBinName: (binName) => {
-		set({ binName })
+	setBin: (binOption) => {
+		set({ binOption })
 		useStore.getState().setBinnedContacts()
 	},
 	setSearchTerm: (searchTerm) => {
@@ -48,47 +49,46 @@ const useStore = create<State>((set) => ({
 	},
 	setBinnedContacts: () => {
 		console.log('setting filtered contacts to state')
-		// Get the current binName from the Zustand store
+		// Get the current bin from the Zustand store
 		set({ binnedContacts: null })
 
-		const { binName, contacts, searchTerm } = useStore.getState()
+		const { binOption, contacts, searchTerm } = useStore.getState()
 
 		set({
 			binnedContacts:
-				binName !== 'Everyone' && contacts !== null
-					? contacts.filter((contact) => contact.binName === binName)
+			binOption !== 'Everyone' && contacts !== null
+					? contacts.filter((contact) => contact.bin === binOption)
 					: contacts,
 		})
 	},
-	updateContact: (contactId, binName) => {
-		// Update binName field for the contact and reset contacts state
+	updateContact: (contactId, bin) => {
+		// Update bin field for the contact and reset contacts state
 		set((state) => {
 			const updatedContacts = (state.contacts || []).map((contact) =>
-				contact.id === contactId ? { ...contact, binName } : contact
+				contact.id === contactId ? { ...contact, bin } : contact
 			)
 			return { contacts: updatedContacts, filteredContacts: null }
 		})
 		// Re-filter the contacts
 		useStore.getState().setBinnedContacts()
 		// Update firebase
-		updateContactInFirebase(contactId, binName)
+		updateContactInFirebase(contactId, bin)
 	},
 	toggleShowSearchBox: () => set(state => ({ showSearchBox: !state.showSearchBox })),
-	sidebarVisible: false,
     toggleSidebar: () => set(state => ({ sidebarVisible: !state.sidebarVisible })),
     toggleAccountDeleteModal: () => set(state => ({ showAccountDeleteModal: !state.showAccountDeleteModal })),
 
 }))
 
-const updateContactInFirebase = (contactId: string, binName: string) => {
+const updateContactInFirebase = (contactId: string, bin: string) => {
 	console.log('contactId: ' + contactId)
 	// Assuming you have a "contacts" collection in Firestore
 	const userId = useStore.getState().user?.uid
 	const userContactsRef = collection(db, 'users', userId ?? '', 'contacts')
 	const contactRef = doc(userContactsRef, contactId)
 
-	// Update the "binName" field of the contact document
-	updateDoc(contactRef, { bin: binName })
+	// Update the "bin" field of the contact document
+	updateDoc(contactRef, { bin: bin })
 		.then(() => {
 			console.log('Contact updated in Firebase successfully.')
 		})

@@ -3,16 +3,16 @@ import {Picker} from '@react-native-picker/picker';
 import useStore from '../store';
 
 const CategoryPicker: React.FC = () => {
-	const { binName, setBinName, setBinnedContacts } = useStore()
+	const { binOption, setBin, setBinnedContacts } = useStore()
 
 	const handlePickerOptionChange = (option: string) => {
-		setBinName(option)
+		setBin(option)
 		setBinnedContacts()
 	}
 
 	return (
 		<Picker
-			selectedValue={binName ?? undefined}
+			selectedValue={binOption ?? undefined}
 			onValueChange={handlePickerOptionChange}>
 			<Picker.Item label='Everyone' value='Everyone' />
 			<Picker.Item label='Loved' value='Loved' />
