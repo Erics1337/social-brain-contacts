@@ -80,7 +80,7 @@ const Sidebar: React.FC = () => {
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'column' }}>
                     <Button title='Delete Account' onPress={() => toggleAccountDeleteModal()} />
-                    <Button title='Other Option' onPress={() => console.log('Other Option')} />
+                    {/* <Button title='Other Option' onPress={() => console.log('Other Option')} /> */}
                 </View>
             </Animated.View>
         </>
