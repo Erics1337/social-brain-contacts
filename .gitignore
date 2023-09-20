@@ -1,5 +1,6 @@
 google-services.json
 social-brain-contacts-396803-d3d8bef95acd.json
+credentials.json
 
 node_modules/**/*
 .expo/*
