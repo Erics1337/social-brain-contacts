@@ -56,7 +56,7 @@ const DeleteUserModal = () => {
 		try {
 			// Remove user associated data
 			const userDoc = doc(
-				collection(db, 'contacts'),
+				collection(db, 'users'),
 				auth.currentUser!.uid
 			)
 			await deleteDoc(userDoc)
