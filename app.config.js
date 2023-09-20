@@ -6,7 +6,7 @@ export default {
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.26',
+		version: '1.0.29',
 		orientation: 'portrait',
 		icon: './assets/logo.png',
 		splash: {
@@ -27,7 +27,8 @@ export default {
 			buildNumber: '1',
 		},
 		android: {
-			package: 'com.socialbrain.socialbraincontacts',
+			package: 'com.socialbrain.social_brain_contacts',
+			versionCode: 2,
 			adaptiveIcon: {
 				foregroundImage: './assets/icon.png',
 				backgroundColor: '#68c7ac',
@@ -49,7 +50,7 @@ export default {
 				'expo-contacts',
 				{
 					contactsPermission:
-					'Allow Social Brain Contacts to access your contacts to group them into categories based on social brain theory. For example, you can organize your contacts into close friends, acquaintances, and distant connections.'
+						'Allow Social Brain Contacts to access your contacts to group them into categories based on social brain theory. For example, you can organize your contacts into close friends, acquaintances, and distant connections. Contacts data is not stored on our servers and will remian private.',
 				},
 			],
 		],

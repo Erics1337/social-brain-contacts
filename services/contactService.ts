@@ -1,4 +1,3 @@
-import * as Contacts from 'expo-contacts'
 import {
 	collection,
 	doc,
@@ -6,41 +5,32 @@ import {
 	writeBatch,
 	orderBy,
 	query,
+	getDoc,
 } from 'firebase/firestore'
 import { db } from '../config/firebase'
 import useStore from '../store'
+import { requestPermissionsAsync, getContactsAsync } from 'expo-contacts'
 
 export async function syncContacts(userId: string) {
-	const { status } = await Contacts.requestPermissionsAsync()
+	const { status } = await requestPermissionsAsync()
 
 	if (status === 'granted') {
-		const { data } = await Contacts.getContactsAsync()
+		const { data } = await getContactsAsync() // Contacts from phone
 
 		const userContactsRef = collection(db, 'users', userId, 'contacts')
-		console.log('Adding contacts to firestore')
+		console.log('Syncing contacts to firestore')
 
 		const batch = writeBatch(db)
 
-		data.forEach((contact) => {
+		for (const contact of data) {
 			const contactRef = doc(userContactsRef, contact.id)
-			const sanitizedContact = {
-				contactType: contact.contactType || 'defaultContactType',
-				emails:
-					contact.emails && contact.emails.length > 0
-						? contact.emails
-						: [],
-				firstName: contact.firstName || '',
-				imageAvailable: contact.imageAvailable || false,
-				lastName: contact.lastName || '',
-				name: contact.name || 'Unknown Name',
-				phoneNumbers:
-					contact.phoneNumbers && contact.phoneNumbers.length > 0
-						? contact.phoneNumbers
-						: [],
-			}
+			const currentDoc = await getDoc(contactRef)
 
-			batch.set(contactRef, sanitizedContact, { merge: true })
-		})
+			// If 'bin' is not already present or is an empty string, set it to ''
+			if (!currentDoc.exists() || !currentDoc.data().bin) {
+				batch.set(contactRef, { bin: '' }, { merge: true })
+			}
+		}
 
 		try {
 			await batch.commit()
@@ -50,29 +40,12 @@ export async function syncContacts(userId: string) {
 		}
 
 		try {
-			const q = query(userContactsRef, orderBy('name'))
-			const snapshot = await getDocs(q)
+			const snapshot = await getDocs(userContactsRef)
 
-			const firebaseContacts = snapshot.docs.map((doc) => {
-				const data = doc.data()
-				return {
-					id: doc.id,
-					binName: data.bin,
-					contactType: data.contactType,
-					emails:
-						data.emails && data.emails.length > 0
-							? data.emails
-							: [],
-					firstName: data.firstName,
-					imageAvailable: data.imageAvailable,
-					lastName: data.lastName,
-					name: data.name,
-					phoneNumbers:
-						data.phoneNumbers && data.phoneNumbers.length > 0
-							? data.phoneNumbers
-							: [],
-				}
-			})
+			const firebaseIdsWithBins = snapshot.docs.map((doc) => ({
+				id: doc.id,
+				bin: doc.data().bin,
+			}))
 
 			const deleteBatch = writeBatch(db)
 
@@ -85,29 +58,18 @@ export async function syncContacts(userId: string) {
 
 			await deleteBatch.commit()
 
-			const updatedSnapshot = await getDocs(userContactsRef)
-			const updatedFirebaseContacts = updatedSnapshot.docs.map((doc) => {
-				const data = doc.data()
+			const enrichedContacts = data.map((phoneContact) => {
+				const associatedBin = firebaseIdsWithBins.find(
+					(fbContact) => fbContact.id === phoneContact.id
+				)?.bin
 				return {
-					id: doc.id,
-					binName: data.bin,
-					contactType: data.contactType,
-					emails:
-						data.emails && data.emails.length > 0
-							? data.emails
-							: [],
-					firstName: data.firstName,
-					imageAvailable: data.imageAvailable,
-					lastName: data.lastName,
-					name: data.name,
-					phoneNumbers:
-						data.phoneNumbers && data.phoneNumbers.length > 0
-							? data.phoneNumbers
-							: [],
+					...phoneContact,
+					bin: associatedBin || '',
 				}
 			})
 
-			useStore.getState().setContacts(updatedFirebaseContacts)
+			useStore.getState().setContacts(enrichedContacts)
+			useStore.getState().setBinnedContacts()
 		} catch (error) {
 			console.log('error getting contacts from firebase', error)
 		}
