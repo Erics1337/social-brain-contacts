@@ -13,7 +13,7 @@ import {
 	deleteUser,
 } from 'firebase/auth'
 import { auth } from '../config'
-import { collection, deleteDoc, doc } from 'firebase/firestore'
+import { collection, deleteDoc, doc, getDocs, writeBatch } from 'firebase/firestore'
 import { db } from '../config'
 import useStore from '../store'
 
@@ -54,14 +54,24 @@ const DeleteUserModal = () => {
 
 	const deleteUserAndData = async () => {
 		try {
-			// Remove user associated data
-			const userDoc = doc(
+			const userDocRef = doc(
 				collection(db, 'users'),
 				auth.currentUser!.uid
 			)
-			await deleteDoc(userDoc)
 
-			// Delete user account
+			// Deleting 'contacts' subcollection associated with the user
+			const contactsCollectionRef = collection(userDocRef, 'contacts')
+			const contactsSnapshot = await getDocs(contactsCollectionRef)
+			const batch = writeBatch(db)
+			contactsSnapshot.forEach((doc) => {
+				batch.delete(doc.ref)
+			})
+			await batch.commit()
+
+			// Deleting user's document from 'users' collection
+			await deleteDoc(userDocRef)
+
+			// Deleting user account from Firebase Authentication
 			await deleteUser(auth.currentUser!)
 
 			toggleAccountDeleteModal()
