@@ -7,20 +7,18 @@ import {
 	TouchableWithoutFeedback,
 	View,
 } from 'react-native'
-import useStore from '../../store' // Assume this is where your Zustand store is located
-import { OverloadedExpoContact } from '../../types' // Assume this is where your types are located
-import Toast from 'react-native-root-toast' // Import the Toast component
+import useStore from '../../store'
+import { OverloadedExpoContact } from '../../types'
+import Toast from 'react-native-root-toast'
 
-export const CategoriesModal = (props: {
-	contact: OverloadedExpoContact
-}) => {
+export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 	const { contact } = props
 	const {
 		updateContact,
 		categoryCounts,
 		groupLimits,
-		categoriesModal, // State from Zustand store
-		toggleCategoriesModal, // Setter function from Zustand store
+		categoriesModal,
+		toggleCategoriesModal,
 	} = useStore()
 
 	const [selectedLabel, setSelectedLabel] = useState('')
@@ -32,11 +30,24 @@ export const CategoriesModal = (props: {
 	const handleOptionSelect = (value: string) => {
 		const safeOption = value as keyof typeof groupLimits
 
+		if (contact.bin === value) {
+			Toast.show('Contact is already in this group!', {
+				duration: Toast.durations.SHORT,
+				position: Toast.positions.BOTTOM,
+				shadow: true,
+				animation: true,
+				hideOnPress: true,
+				backgroundColor: 'orange',
+				textColor: 'white',
+			})
+			toggleCategoriesModal() // Close modal
+			return
+		}
+
 		if (
 			groupLimits[safeOption] &&
 			categoryCounts[safeOption] >= groupLimits[safeOption]
 		) {
-			console.log('Limit reached. Showing toast.') // Debugging log
 			Toast.show(
 				`The group ${value} is full. Limit size has been reached.`,
 				{
@@ -49,21 +60,21 @@ export const CategoriesModal = (props: {
 					textColor: 'white',
 				}
 			)
-			toggleCategoriesModal() // Close modal using Zustand store
+			toggleCategoriesModal() // Close modal
 			return
 		}
 
 		setSelectedLabel(value)
-		updateContact(contact.id, value) // Update function from Zustand store to update contact state and Firebase
-		toggleCategoriesModal() // Close modal using Zustand store
+		updateContact(contact.id, value)
+		toggleCategoriesModal()
 	}
 
 	const CategoryOption = ({ category, handleOptionSelect }) => {
 		return (
 			<TouchableOpacity
-				className='p-2'
+				style={{ padding: 10 }} // Replaced className with inline style for demonstration purposes
 				onPress={() => handleOptionSelect(category)}>
-				<Text className='text-base'>{category}</Text>
+				<Text style={{ fontSize: 16 }}>{category}</Text>
 			</TouchableOpacity>
 		)
 	}
@@ -74,12 +85,36 @@ export const CategoriesModal = (props: {
 			transparent={true}
 			animationType='fade'>
 			<TouchableWithoutFeedback onPress={handleModalClose}>
-				<View className='flex-1 justify-center items-center bg-opacity-50 bg-black'>
+				<View
+					style={{
+						flex: 1,
+						justifyContent: 'center',
+						alignItems: 'center',
+						backgroundColor: 'rgba(0, 0, 0, 0.5)',
+					}}>
+					{/* Replaced className with inline style for demonstration purposes */}
 					<Pressable>
-						<View className='bg-white p-4 rounded shadow'>
-							<Text className='text-lg font-bold mb-4'>
+						<View
+							style={{
+								backgroundColor: 'white',
+								padding: 16,
+								borderRadius: 8,
+								shadowColor: '#000',
+								shadowOffset: { width: 0, height: 2 },
+								shadowOpacity: 0.25,
+								shadowRadius: 3.84,
+								elevation: 5,
+							}}>
+							{/* Replaced className with inline style for demonstration purposes */}
+							<Text
+								style={{
+									fontSize: 24,
+									fontWeight: 'bold',
+									marginBottom: 16,
+								}}>
 								Select Option
 							</Text>
+							{/* Replaced className with inline style for demonstration purposes */}
 							{Object.keys(groupLimits).map((category, index) => (
 								<CategoryOption
 									key={index}
@@ -88,11 +123,12 @@ export const CategoriesModal = (props: {
 								/>
 							))}
 							<TouchableOpacity
-								className='p-2'
+								style={{ padding: 10 }} // Replaced className with inline style for demonstration purposes
 								onPress={handleModalClose}>
-								<Text className='text-base text-red-500'>
+								<Text style={{ fontSize: 16, color: 'red' }}>
 									Cancel
 								</Text>
+								{/* Replaced className with inline style for demonstration purposes */}
 							</TouchableOpacity>
 						</View>
 					</Pressable>
