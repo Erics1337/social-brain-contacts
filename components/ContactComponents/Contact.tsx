@@ -40,7 +40,7 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 
 	const initials = getInitials(firstName, lastName)
 
-	const [showModal, setShowModal] = useState(false)
+	const {categoriesModal, toggleCategoriesModal} = useStore()
 
 	// Handlers
 	const handleCall = () => {
@@ -74,7 +74,7 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 	}
 
 	const handleLongPress = () => {
-		setShowModal(true)
+		toggleCategoriesModal()
 	}
 
 	return (
@@ -92,11 +92,9 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 						emailDisabled={!contact?.emails?.length}
 						textDisabled={false}
 					/>
-					{showModal && (
+					{categoriesModal && (
 						<CategoriesModal
 							contact={contact}
-							showModal={showModal}
-							setShowModal={setShowModal}
 						/>
 					)}
 				</View>

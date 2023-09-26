@@ -3,6 +3,11 @@ import { User } from '@firebase/auth'
 import { OverloadedExpoContact } from '../types'
 import { collection, doc, updateDoc } from 'firebase/firestore'
 import { db } from '../config/firebase'
+import { Category } from '../utils'
+
+type CategoryCounts = {
+	[key in Category]: number
+}
 
 type State = {
 	user: User | null
@@ -13,6 +18,9 @@ type State = {
 	showSearchBox: boolean | null
 	sidebarVisible: boolean | null
 	showAccountDeleteModal: boolean | null
+	categoryCounts: CategoryCounts
+	groupLimits: CategoryCounts
+	categoriesModal: boolean | null
 	setUser: (user: User | null) => void
 	setBin: (bin: string) => void
 	setSearchTerm: (searchTerm: string) => void
@@ -22,6 +30,8 @@ type State = {
 	toggleShowSearchBox: () => void
 	toggleSidebar: () => void
 	toggleAccountDeleteModal: () => void
+	initializeCategoryCounts: (initialCounts: CategoryCounts) => void
+	toggleCategoriesModal: () => void
 }
 
 const useStore = create<State>((set) => ({
@@ -33,6 +43,26 @@ const useStore = create<State>((set) => ({
 	sidebarVisible: false,
 	showSearchBox: false,
 	showAccountDeleteModal: false,
+	groupLimits: {
+		[Category.EVERYONE]: 5,
+		[Category.INTIMATE]: 5,
+		[Category.BEST_FRIENDS]: 15,
+		[Category.GOOD_FRIENDS]: 50,
+		[Category.CASUAL_FRIENDS]: 150,
+		[Category.ACQUAINTANCES]: 500,
+		[Category.RECOGNIZABLE]: 1500,
+	},
+	categoryCounts: {
+		[Category.EVERYONE]: 0,
+		[Category.INTIMATE]: 0,
+		[Category.BEST_FRIENDS]: 0,
+		[Category.GOOD_FRIENDS]: 0,
+		[Category.CASUAL_FRIENDS]: 0,
+		[Category.ACQUAINTANCES]: 0,
+		[Category.RECOGNIZABLE]: 0,
+	},
+	categoriesModal: false,
+
 	setUser: (user) => set({ user }),
 	setBin: (binOption) => {
 		set({ binOption })
@@ -51,33 +81,61 @@ const useStore = create<State>((set) => ({
 		console.log('setting filtered contacts to state')
 		// Get the current bin from the Zustand store
 		set({ binnedContacts: null })
-
-		const { binOption, contacts, searchTerm } = useStore.getState()
+		const { binOption, contacts } = useStore.getState()
 
 		set({
 			binnedContacts:
-			binOption !== 'Everyone' && contacts !== null
+				binOption !== 'Everyone' && contacts !== null
 					? contacts.filter((contact) => contact.bin === binOption)
 					: contacts,
 		})
 	},
-	updateContact: (contactId, bin) => {
-		// Update bin field for the contact and reset contacts state
+	updateContact: (contactId, newBin) => {
 		set((state) => {
 			const updatedContacts = (state.contacts || []).map((contact) =>
-				contact.id === contactId ? { ...contact, bin } : contact
+				contact.id === contactId ? { ...contact, bin: newBin } : contact
 			)
-			return { contacts: updatedContacts, filteredContacts: null }
+			const oldContact = (state.contacts || []).find(
+				(contact) => contact.id === contactId
+			)
+			const oldBin = oldContact ? oldContact.bin : null
+			// Initialize categoryCounts if it doesn't exist
+			const updatedCategoryCounts = state.categoryCounts || {}
+			// Decrement count for old bin if applicable
+			if (oldBin) {
+				updatedCategoryCounts[oldBin] =
+					(updatedCategoryCounts[oldBin] || 1) - 1
+			}
+			// Increment count for new bin
+			updatedCategoryCounts[newBin] =
+				(updatedCategoryCounts[newBin] || 0) + 1
+			return {
+				contacts: updatedContacts,
+				filteredContacts: null,
+				categoryCounts: updatedCategoryCounts,
+			}
 		})
 		// Re-filter the contacts
 		useStore.getState().setBinnedContacts()
 		// Update firebase
-		updateContactInFirebase(contactId, bin)
+		updateContactInFirebase(contactId, newBin)
 	},
-	toggleShowSearchBox: () => set(state => ({ showSearchBox: !state.showSearchBox })),
-    toggleSidebar: () => set(state => ({ sidebarVisible: !state.sidebarVisible })),
-    toggleAccountDeleteModal: () => set(state => ({ showAccountDeleteModal: !state.showAccountDeleteModal })),
 
+	initializeCategoryCounts: (initialCounts: CategoryCounts) => {
+		set({ categoryCounts: initialCounts })
+	},
+	toggleShowSearchBox: () =>
+		set((state) => ({ showSearchBox: !state.showSearchBox })),
+	toggleSidebar: () =>
+		set((state) => ({ sidebarVisible: !state.sidebarVisible })),
+	toggleAccountDeleteModal: () =>
+		set((state) => ({
+			showAccountDeleteModal: !state.showAccountDeleteModal,
+		})),
+	toggleCategoriesModal: () => {
+		console.log('toggleCategoriesModal')
+		set((state) => ({ categoriesModal: !state.categoriesModal }));
+	},
 }))
 
 const updateContactInFirebase = (contactId: string, bin: string) => {

@@ -8,7 +8,7 @@ export default {
 		platforms: ['ios', 'android'],
 		version: '1.0.29',
 		orientation: 'portrait',
-		icon: './assets/logo.png',
+		icon: './assets/icon.png',
 		splash: {
 			image: './assets/splash.png',
 			resizeMode: 'cover',
