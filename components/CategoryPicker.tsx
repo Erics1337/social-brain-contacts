@@ -1,8 +1,14 @@
+// CategoryPicker.tsx
 import React from 'react'
-import {Picker} from '@react-native-picker/picker';
-import useStore from '../store';
+import { Picker } from '@react-native-picker/picker'
+import useStore from '../store'
+import { Category as categories } from '../utils';
 
-const CategoryPicker: React.FC = () => {
+interface CategoryPickerProps {
+	categories: Record<string, string>
+}
+
+const CategoryPicker: React.FC<CategoryPickerProps> = () => {
 	const { binOption, setBin, setBinnedContacts } = useStore()
 
 	const handlePickerOptionChange = (option: string) => {
@@ -14,12 +20,9 @@ const CategoryPicker: React.FC = () => {
 		<Picker
 			selectedValue={binOption ?? undefined}
 			onValueChange={handlePickerOptionChange}>
-			<Picker.Item label='Everyone' value='Everyone' />
-			<Picker.Item label='Loved' value='Loved' />
-			<Picker.Item label='Family' value='Family' />
-			<Picker.Item label='Friends' value='Friends' />
-			<Picker.Item label='Acquaintances' value='Acquaintances' />
-			<Picker.Item label='Recognizable' value='Recognizable' />
+			{Object.entries(categories).map(([key, value]) => (
+				<Picker.Item key={key} label={value} value={value} />
+			))}
 		</Picker>
 	)
 }

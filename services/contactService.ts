@@ -10,6 +10,7 @@ import {
 import { db } from '../config/firebase'
 import useStore from '../store'
 import { requestPermissionsAsync, getContactsAsync } from 'expo-contacts'
+import { Category } from '../utils'
 
 export async function syncContacts(userId: string) {
 	const { status } = await requestPermissionsAsync()
@@ -76,15 +77,47 @@ export async function syncContacts(userId: string) {
 			console.log('error deleting contacts from firebase', error)
 		}
 
-		// Create enrichedContacts using a map for efficient lookups
+		// Initialize counts object
+		const initialCounts: { [key: string]: number } = {
+			[Category.EVERYONE]: 0,
+			[Category.INTIMATE]: 0,
+			[Category.BEST_FRIENDS]: 0,
+			[Category.GOOD_FRIENDS]: 0,
+			[Category.CASUAL_FRIENDS]: 0,
+			[Category.ACQUAINTANCES]: 0,
+			[Category.RECOGNIZABLE]: 0,
+		}
+
+		// Create enrichedContacts and initialize category counts simultaneously
 		const enrichedContacts = data.map((phoneContact) => {
-			const associatedBin = existingContacts.find(
-				(fbContact) => fbContact.id === phoneContact.id
-			)?.bin
+			const associatedBin =
+				existingContacts.find(
+					(fbContact) => fbContact.id === phoneContact.id
+				)?.bin || ''
+
+			// Update the initialCounts
+			if (initialCounts[associatedBin] !== undefined) {
+				initialCounts[associatedBin]++
+			}
+
 			return {
 				...phoneContact,
-				bin: associatedBin || '',
+				bin: associatedBin,
 			}
+		})
+
+		const store = useStore.getState()
+		store.setContacts(enrichedContacts)
+
+		// Directly set categoryCounts based on the counts obtained while enriching contacts
+		store.initializeCategoryCounts({
+			Everyone: initialCounts[Category.EVERYONE],
+			"Close Intimates": initialCounts[Category.INTIMATE],
+			"Best Friends": initialCounts[Category.BEST_FRIENDS],
+			"Good Friends": initialCounts[Category.GOOD_FRIENDS],
+			"Casual Friends": initialCounts[Category.CASUAL_FRIENDS],
+			Acquaintances: initialCounts[Category.ACQUAINTANCES],
+			Recognizable: initialCounts[Category.RECOGNIZABLE],
 		})
 
 		useStore.getState().setContacts(enrichedContacts)
