@@ -53,6 +53,7 @@ APP_ID=XXXX
 
 - `yarn ios` -- open on iOS
 - `yarn android` -- open on Android
+- `npx expo start` -- start expo server
 
 <!-- ## Screens
 
