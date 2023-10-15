@@ -12,12 +12,17 @@ import useStore from '../store'
 import { requestPermissionsAsync, getContactsAsync } from 'expo-contacts'
 import { Category } from '../utils'
 
+
 export async function syncContacts(userId: string) {
 	const { status } = await requestPermissionsAsync()
-
+	
 	if (status === 'granted') {
 		const { data } = await getContactsAsync() // Contacts from phone
-
+		// Dynamic batch size strategy
+		const maxBatchSize = 5000; // Adjust based on Firestore rate limits
+		const numberOfContacts = data.length;
+		const batchSize = Math.min(maxBatchSize, numberOfContacts);
+		
 		const userContactsRef = collection(db, 'users', userId, 'contacts')
 		console.log('Syncing contacts to firestore')
 
@@ -45,7 +50,7 @@ export async function syncContacts(userId: string) {
 				batchCount++
 
 				// Commit batch if it reaches the limit
-				if (batchCount >= 500) {
+				if (batchCount >= batchSize) {
 					await batch.commit()
 					batchCount = 0
 				}
@@ -56,25 +61,22 @@ export async function syncContacts(userId: string) {
 			if (batchCount > 0) {
 				await batch.commit()
 			}
+
+			// Delete batch to handle deletions
+			const deleteBatch = writeBatch(db)
+			const phoneContactIds = data.map((c) => c.id)
+			for (const existingContact of existingContacts) {
+				if (!phoneContactIds.includes(existingContact.id)) {
+					const contactRef = doc(userContactsRef, existingContact.id)
+					deleteBatch.delete(contactRef)
+				}
+			}
+
+			await deleteBatch.commit()
+
 			console.log('All contacts updated in firebase successfully')
 		} catch (err) {
 			console.log('error syncing contacts to firebase', err)
-		}
-
-		// Delete batch to handle deletions
-		const deleteBatch = writeBatch(db)
-		const phoneContactIds = data.map((c) => c.id)
-		for (const existingContact of existingContacts) {
-			if (!phoneContactIds.includes(existingContact.id)) {
-				const contactRef = doc(userContactsRef, existingContact.id)
-				deleteBatch.delete(contactRef)
-			}
-		}
-
-		try {
-			await deleteBatch.commit()
-		} catch (error) {
-			console.log('error deleting contacts from firebase', error)
 		}
 
 		// Initialize counts object
@@ -112,10 +114,10 @@ export async function syncContacts(userId: string) {
 		// Directly set categoryCounts based on the counts obtained while enriching contacts
 		store.initializeCategoryCounts({
 			Everyone: initialCounts[Category.EVERYONE],
-			"Close Intimates": initialCounts[Category.INTIMATE],
-			"Best Friends": initialCounts[Category.BEST_FRIENDS],
-			"Good Friends": initialCounts[Category.GOOD_FRIENDS],
-			"Casual Friends": initialCounts[Category.CASUAL_FRIENDS],
+			'Close Intimates': initialCounts[Category.INTIMATE],
+			'Best Friends': initialCounts[Category.BEST_FRIENDS],
+			'Good Friends': initialCounts[Category.GOOD_FRIENDS],
+			'Casual Friends': initialCounts[Category.CASUAL_FRIENDS],
 			Acquaintances: initialCounts[Category.ACQUAINTANCES],
 			Recognizable: initialCounts[Category.RECOGNIZABLE],
 		})
