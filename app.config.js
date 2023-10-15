@@ -6,7 +6,7 @@ export default {
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.30',
+		version: '1.0.31',
 		orientation: 'portrait',
 		icon: './assets/icon.png',
 		splash: {
@@ -28,7 +28,7 @@ export default {
 		},
 		android: {
 			package: 'com.socialbrain.social_brain_contacts',
-			versionCode: 2,
+			versionCode: 4,
 			adaptiveIcon: {
 				foregroundImage: './assets/icon.png',
 				backgroundColor: '#68c7ac',
