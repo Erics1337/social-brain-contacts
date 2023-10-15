@@ -29,7 +29,7 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 
 	const handleOptionSelect = (value: string) => {
 		const safeOption = value as keyof typeof groupLimits
-
+		// Contact already in group
 		if (contact.bin === value) {
 			Toast.show('Contact is already in this group!', {
 				duration: Toast.durations.SHORT,
@@ -43,7 +43,7 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 			toggleCategoriesModal() // Close modal
 			return
 		}
-
+		// Group population limit reached
 		if (
 			groupLimits[safeOption] &&
 			categoryCounts[safeOption] >= groupLimits[safeOption]
@@ -69,7 +69,12 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 		toggleCategoriesModal()
 	}
 
-	const CategoryOption = ({ category, handleOptionSelect }) => {
+	type CategoryOptionProps = {
+		category: string;
+		handleOptionSelect: (value: string) => void;
+	}
+
+	const CategoryOption = ({ category, handleOptionSelect }: CategoryOptionProps) => {
 		return (
 			<TouchableOpacity
 				style={{ padding: 10 }} // Replaced className with inline style for demonstration purposes
