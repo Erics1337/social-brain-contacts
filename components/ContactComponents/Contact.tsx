@@ -74,7 +74,6 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 
 
 	const handleLongPress = () => {
-		console.log('Long Press Contact Id: ', contact.id)
 		setIsModalVisible(true) // Open modal for this specific contact
 	}
 
@@ -87,7 +86,7 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 			<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
 				<Avatar initials={initials} />
 				<View className='flex-1 mx-3'>
-					<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName} ${contact.id}`}</Text>
+					<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName}`}</Text>
 				</View>
 				<ActionIcons
 					onCall={handleCall}
