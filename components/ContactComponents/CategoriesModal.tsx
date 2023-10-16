@@ -11,21 +11,18 @@ import useStore from '../../store'
 import { OverloadedExpoContact } from '../../types'
 import Toast from 'react-native-root-toast'
 
-export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
+export const CategoriesModal = (props: {
+	contact: OverloadedExpoContact
+	onClose: () => void
+}) => {
 	const { contact } = props
-	const {
-		updateContact,
-		categoryCounts,
-		groupLimits,
-		categoriesModal,
-		toggleCategoriesModal,
-	} = useStore()
-
-	const [selectedLabel, setSelectedLabel] = useState('')
+	const { updateContact, categoryCounts, groupLimits } = useStore()
 
 	const handleModalClose = () => {
-		toggleCategoriesModal()
+		props.onClose()
 	}
+
+	const [selectedLabel, setSelectedLabel] = useState('')
 
 	const handleOptionSelect = (value: string) => {
 		const safeOption = value as keyof typeof groupLimits
@@ -40,7 +37,7 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 				backgroundColor: 'orange',
 				textColor: 'white',
 			})
-			toggleCategoriesModal() // Close modal
+			handleModalClose() // Close modal
 			return
 		}
 		// Group population limit reached
@@ -60,21 +57,24 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 					textColor: 'white',
 				}
 			)
-			toggleCategoriesModal() // Close modal
+			handleModalClose() // Close modal
 			return
 		}
 
 		setSelectedLabel(value)
 		updateContact(contact.id, value)
-		toggleCategoriesModal()
+		handleModalClose()
 	}
 
 	type CategoryOptionProps = {
-		category: string;
-		handleOptionSelect: (value: string) => void;
+		category: string
+		handleOptionSelect: (value: string) => void
 	}
 
-	const CategoryOption = ({ category, handleOptionSelect }: CategoryOptionProps) => {
+	const CategoryOption = ({
+		category,
+		handleOptionSelect,
+	}: CategoryOptionProps) => {
 		return (
 			<TouchableOpacity
 				style={{ padding: 10 }} // Replaced className with inline style for demonstration purposes
@@ -86,7 +86,7 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 
 	return (
 		<Modal
-			visible={categoriesModal!}
+			visible={true}
 			transparent={true}
 			animationType='fade'>
 			<TouchableWithoutFeedback onPress={handleModalClose}>
@@ -97,7 +97,6 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 						alignItems: 'center',
 						backgroundColor: 'rgba(0, 0, 0, 0.5)',
 					}}>
-					{/* Replaced className with inline style for demonstration purposes */}
 					<Pressable>
 						<View
 							style={{
@@ -110,7 +109,6 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 								shadowRadius: 3.84,
 								elevation: 5,
 							}}>
-							{/* Replaced className with inline style for demonstration purposes */}
 							<Text
 								style={{
 									fontSize: 24,
@@ -119,7 +117,6 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 								}}>
 								Select Option
 							</Text>
-							{/* Replaced className with inline style for demonstration purposes */}
 							{Object.keys(groupLimits).map((category, index) => (
 								<CategoryOption
 									key={index}
@@ -133,7 +130,6 @@ export const CategoriesModal = (props: { contact: OverloadedExpoContact }) => {
 								<Text style={{ fontSize: 16, color: 'red' }}>
 									Cancel
 								</Text>
-								{/* Replaced className with inline style for demonstration purposes */}
 							</TouchableOpacity>
 						</View>
 					</Pressable>

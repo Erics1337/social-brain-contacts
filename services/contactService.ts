@@ -18,6 +18,8 @@ export async function syncContacts(userId: string) {
 	
 	if (status === 'granted') {
 		const { data } = await getContactsAsync() // Contacts from phone
+
+
 		// Dynamic batch size strategy
 		const maxBatchSize = 5000; // Adjust based on Firestore rate limits
 		const numberOfContacts = data.length;

@@ -10,7 +10,6 @@ import {
 import Avatar from './Avatar'
 import ActionIcons from './ActionIcons'
 import { OverloadedExpoContact } from '../../types'
-import useStore from '../../store'
 import { openURL } from 'expo-linking'
 import { CategoriesModal } from './CategoriesModal'
 
@@ -40,7 +39,7 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 
 	const initials = getInitials(firstName, lastName)
 
-	const {categoriesModal, toggleCategoriesModal} = useStore()
+	const [isModalVisible, setIsModalVisible] = useState(false)
 
 	// Handlers
 	const handleCall = () => {
@@ -73,31 +72,38 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 		} else console.log('no contact email found')
 	}
 
+
 	const handleLongPress = () => {
-		toggleCategoriesModal()
+		console.log('Long Press Contact Id: ', contact.id)
+		setIsModalVisible(true) // Open modal for this specific contact
+	}
+
+	const handleCloseModal = () => {
+		setIsModalVisible(false)
 	}
 
 	return (
 		<TouchableOpacity activeOpacity={0.5} onLongPress={handleLongPress}>
-				<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
-					<Avatar initials={initials} />
-					<View className='flex-1 mx-3'>
-					<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName}`}</Text>
-					</View>
-					<ActionIcons
-						onCall={handleCall}
-						onText={handleText}
-						onEmail={handleEmail}
-						callDisabled={false}
-						emailDisabled={!contact?.emails?.length}
-						textDisabled={false}
-					/>
-					{categoriesModal && (
-						<CategoriesModal
-							contact={contact}
-						/>
-					)}
+			<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
+				<Avatar initials={initials} />
+				<View className='flex-1 mx-3'>
+					<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName} ${contact.id}`}</Text>
 				</View>
+				<ActionIcons
+					onCall={handleCall}
+					onText={handleText}
+					onEmail={handleEmail}
+					callDisabled={false}
+					emailDisabled={!contact?.emails?.length}
+					textDisabled={false}
+				/>
+				{isModalVisible && (
+					<CategoriesModal
+						contact={contact}
+						onClose={handleCloseModal}
+					/>
+				)}
+			</View>
 		</TouchableOpacity>
 	)
 }

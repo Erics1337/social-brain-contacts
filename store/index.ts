@@ -20,7 +20,6 @@ type State = {
 	showAccountDeleteModal: boolean | null
 	categoryCounts: CategoryCounts
 	groupLimits: CategoryCounts
-	categoriesModal: boolean | null
 	setUser: (user: User | null) => void
 	setBin: (bin: string) => void
 	setSearchTerm: (searchTerm: string) => void
@@ -31,7 +30,6 @@ type State = {
 	toggleSidebar: () => void
 	toggleAccountDeleteModal: () => void
 	initializeCategoryCounts: (initialCounts: CategoryCounts) => void
-	toggleCategoriesModal: () => void
 }
 
 const useStore = create<State>((set) => ({
@@ -61,8 +59,6 @@ const useStore = create<State>((set) => ({
 		[Category.ACQUAINTANCES]: 0,
 		[Category.RECOGNIZABLE]: 0,
 	},
-	categoriesModal: false,
-
 	setUser: (user) => set({ user }),
 	setBin: (binOption) => {
 		set({ binOption })
@@ -73,7 +69,6 @@ const useStore = create<State>((set) => ({
 	},
 	setContacts: (contacts) => {
 		// Contacts should be sorted by name from the firebase query fired on Auth load by RootNavigator
-		console.log('Setting contacts to state')
 		set({ contacts })
 		set({ binnedContacts: contacts })
 	},
@@ -90,36 +85,6 @@ const useStore = create<State>((set) => ({
 					: contacts,
 		})
 	},
-	updateContact: (contactId, newBin) => {
-		set((state) => {
-			const updatedContacts = (state.contacts || []).map((contact) =>
-				contact.id === contactId ? { ...contact, bin: newBin } : contact
-			)
-			const oldContact = (state.contacts || []).find(
-				(contact) => contact.id === contactId
-			)
-			const oldBin = oldContact ? oldContact.bin : null
-			// Initialize categoryCounts if it doesn't exist
-			const updatedCategoryCounts = state.categoryCounts || {}
-			// Decrement count for old bin if applicable
-			if (oldBin) {
-				updatedCategoryCounts[oldBin] =
-					(updatedCategoryCounts[oldBin] || 1) - 1
-			}
-			// Increment count for new bin
-			updatedCategoryCounts[newBin] =
-				(updatedCategoryCounts[newBin] || 0) + 1
-			return {
-				contacts: updatedContacts,
-				filteredContacts: null,
-				categoryCounts: updatedCategoryCounts,
-			}
-		})
-		// Re-filter the contacts
-		useStore.getState().setBinnedContacts()
-		// Update firebase
-		updateContactInFirebase(contactId, newBin)
-	},
 
 	initializeCategoryCounts: (initialCounts: CategoryCounts) => {
 		set({ categoryCounts: initialCounts })
@@ -132,14 +97,42 @@ const useStore = create<State>((set) => ({
 		set((state) => ({
 			showAccountDeleteModal: !state.showAccountDeleteModal,
 		})),
-	toggleCategoriesModal: () => {
-		console.log('toggleCategoriesModal')
-		set((state) => ({ categoriesModal: !state.categoriesModal }));
+	updateContact: (contactId, newBin) => {
+		set((state) => {
+			const updatedContacts = (state.contacts || []).map((contact) =>
+				contact.id === contactId ? { ...contact, bin: newBin } : contact
+			)
+			const oldContact = (state.contacts || []).find(
+				(contact) => contact.id === contactId
+			)
+			const oldBin = oldContact ? oldContact.bin : null
+			// Initialize categoryCounts if it doesn't exist
+			const updatedCategoryCounts: CategoryCounts =
+				state.categoryCounts || {}
+			// Decrement count for old bin if applicable
+			if (oldBin) {
+				updatedCategoryCounts[oldBin as Category] =
+					(updatedCategoryCounts[oldBin as Category] || 1) - 1
+			}
+			// Increment count for new bin
+			updatedCategoryCounts[newBin as Category] =
+				(updatedCategoryCounts[newBin as Category] || 0) + 1
+			return {
+				contacts: updatedContacts,
+				filteredContacts: null,
+				categoryCounts: updatedCategoryCounts,
+			}
+		})
+		// Re-filter the contacts
+		useStore.getState().setBinnedContacts()
+		// Update firebase
+		updateContactInFirebase(contactId, newBin)
 	},
 }))
 
+// Other Functions
+
 const updateContactInFirebase = (contactId: string, bin: string) => {
-	console.log('contactId: ' + contactId)
 	// Assuming you have a "contacts" collection in Firestore
 	const userId = useStore.getState().user?.uid
 	const userContactsRef = collection(db, 'users', userId ?? '', 'contacts')
