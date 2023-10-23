@@ -30,7 +30,7 @@ export const TextInput: FC<TextInputProps> = ({
 					name={leftIconName}
 					size={22}
 					color={Colors.mediumGray}
-					className='mr-2.5'
+					className='mr-2.5 mt-2'
 				/>
 			) : null}
 			<RNTextInput
