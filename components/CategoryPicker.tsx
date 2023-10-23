@@ -4,11 +4,9 @@ import { Picker } from '@react-native-picker/picker'
 import useStore from '../store'
 import { Category as categories } from '../utils';
 
-interface CategoryPickerProps {
-	categories: Record<string, string>
-}
 
-const CategoryPicker: React.FC<CategoryPickerProps> = () => {
+
+const CategoryPicker: React.FC<{}> = () => {
 	const { binOption, setBin, setBinnedContacts } = useStore()
 
 	const handlePickerOptionChange = (option: string) => {
