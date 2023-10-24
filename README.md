@@ -33,7 +33,7 @@ Social Brain Theory suggests that human social networks have a layered structure
 1. Create a new project using the Social Brain Contacts template.
 
 ```bash
-npx create-react-native-app --template https://github.com/erics1337/social-brain-contacts
+git clone https://github.com/erics1337/social-brain-contacts
 ```
 
 2. create a `.env` file with your own configuration, e.g.:
