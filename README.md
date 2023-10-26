@@ -38,7 +38,7 @@ git clone https://github.com/erics1337/social-brain-contacts
 
 2. create a `.env` file with your own configuration, e.g.:
 
-```shell
+```bash
 # Rename this file to ".env" before use
 # Replace XXXX's with your own Firebase config keys
 API_KEY=XXXX
