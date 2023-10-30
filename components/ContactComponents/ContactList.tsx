@@ -1,49 +1,80 @@
-import React, { useEffect, useState, useMemo } from 'react'
-import {
-	FlatList,
-	SafeAreaView,
-	Text,
-	TextInput,
-	View,
-	Button,
-} from 'react-native'
+import React, { useState, useMemo } from 'react'
+import { FlatList, SafeAreaView, Text, View } from 'react-native'
 import Contact from './Contact'
 import useStore from '../../store'
 import { LoadingIndicator } from '../LoadingIndicator'
+import { SearchBar } from '@rneui/themed'
 
 interface SearchBoxProps {
 	onChange: (text: string) => void
 }
 
-const SearchBox: React.FC<SearchBoxProps> = ({ onChange }) => (
-	<TextInput
-		className='h-10 border-b border-gray-400'
-		onChangeText={onChange}
-		placeholder='Search Contact'
-	/>
-)
+const SearchBox: React.FC<SearchBoxProps> = ({ onChange }) => {
+	const [localSearch, setLocalSearch] = useState('')
 
-const ContactList: React.FC = () => {
-	const { binnedContacts, showSearchBox } = useStore()
-	const [searchTerm, setSearchTerm] = useState('')
-
-	const filteredContacts = useMemo(() => {
-		if (!binnedContacts) return []
-
-		return searchTerm === ''
-			? binnedContacts
-			: binnedContacts.filter((contact) =>
-					contact.name.includes(searchTerm)
-			  )
-	}, [binnedContacts, searchTerm])
-
-	if (!binnedContacts) {
-		return <LoadingIndicator />
+	const updateSearch = (search: string) => {
+		setLocalSearch(search)
+		onChange(search) // Notify parent component of change
 	}
 
 	return (
+		<SearchBar
+			placeholder='Search Contacts'
+			placeholderTextColor='#68c7ac'
+			onChangeText={updateSearch}
+			value={localSearch}
+			inputStyle={{ color: '#68c7ac' }}
+			containerStyle={{
+				backgroundColor: 'white',
+				borderBottomColor: 'transparent',
+				borderTopColor: 'transparent',
+			}}
+			inputContainerStyle={{ backgroundColor: '#f8f8f8' }}
+			searchIcon={{ color: '#68c7ac' }}
+			clearIcon={{ color: '#68c7ac' }}
+		/>
+	)
+}
+
+interface ContactListProps {
+	filterByBin?: boolean
+	showUngrouped?: boolean
+}
+
+const ContactList: React.FC<ContactListProps> = ({
+	filterByBin = false,
+	showUngrouped = false,
+}) => {
+	const { contacts, binnedContacts } = useStore()
+	const [searchTerm, setSearchTerm] = useState('')
+
+	const sourceContacts = filterByBin ? binnedContacts : contacts
+
+	const filteredContacts = useMemo(() => {
+		if (!sourceContacts) return []
+
+		const ungroupedContacts = showUngrouped
+			? sourceContacts.filter((contact) => !contact.bin)
+			: sourceContacts
+
+		if (searchTerm === '') {
+			return ungroupedContacts
+		}
+
+		const searchTerms = searchTerm
+			.split(' ')
+			.map((term) => term.toLowerCase())
+
+		return ungroupedContacts.filter((contact) =>
+			searchTerms.every((term) =>
+				contact.name.toLowerCase().includes(term)
+			)
+		)
+	}, [sourceContacts, searchTerm, showUngrouped])
+
+	return (
 		<SafeAreaView className='flex-1 bg-white'>
-			{showSearchBox && <SearchBox onChange={setSearchTerm} />}
+			<SearchBox onChange={setSearchTerm} />
 			{filteredContacts.length > 0 ? (
 				<FlatList
 					data={filteredContacts}
@@ -52,8 +83,8 @@ const ContactList: React.FC = () => {
 					showsVerticalScrollIndicator={true}
 				/>
 			) : (
-				<View className='bg-gray-100 py-5 flex-1 justify-center'>
-					<Text className='text-center text-xl'>
+				<View className='flex-1 justify-center bg-gray-100 py-5'>
+					<Text className='text-center text-xl text-gray-500'>
 						No Contacts in this group yet
 					</Text>
 				</View>

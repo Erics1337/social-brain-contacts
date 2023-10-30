@@ -4,8 +4,13 @@ import useStore from '../store';
 import { signOut } from 'firebase/auth';
 import { auth } from '../config';
 import DeleteUserModal from './DeleteUserModal';
+import { useNavigation } from '@react-navigation/native';
+import { AppStackParamList } from '../types';
 
 const Sidebar: React.FC = () => {
+    const navigation = useNavigation();
+
+
     const slideAnim = useRef(new Animated.Value(-500)).current;
     const accountSlideAnim = useRef(new Animated.Value(-500)).current;
 
@@ -57,7 +62,12 @@ const Sidebar: React.FC = () => {
                     <Text style={{ fontSize: 24 }}>X</Text>
                 </TouchableOpacity>
                 <View style={{ flexDirection: 'column' }}>
-                    <Button title='Search' onPress={() => toggleShowSearchBox()} />
+                    <Button title='Sort Contacts' onPress={() => {
+                        navigation.navigate('Sort');
+                        toggleSidebar()
+
+                    }
+                        } />
                     <Button title='Account' onPress={() => setShowAccountSidebar(true)} />
                     <Button title='Sign Out' onPress={handleLogout} color='#000' />
                 </View>

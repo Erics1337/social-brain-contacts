@@ -23,7 +23,6 @@ export const passwordResetSchema = Yup.object().shape({
 
 // Enums
 export enum Category {
-	EVERYONE = 'Everyone',
 	INTIMATE = 'Close Intimates',
 	BEST_FRIENDS = 'Best Friends',
 	GOOD_FRIENDS = 'Good Friends',

@@ -8,7 +8,7 @@ const HomeScreen: React.FC = () => {
 	return (
 		<View className='flex-1'>
 			<CategoryPicker />
-			<ContactList />
+			<ContactList filterByBin={true} />
 		</View>
 	)
 }

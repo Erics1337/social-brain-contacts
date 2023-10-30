@@ -1,57 +1,64 @@
 import { createStackNavigator } from '@react-navigation/stack'
+import { useNavigation } from '@react-navigation/native'
 import React from 'react'
 
 import HomeScreen from '../screens/HomeScreen'
 import { AppStackParamList } from '../types'
-import { Button, Image, View } from 'react-native'
+import { Button, Image, TouchableOpacity, View } from 'react-native'
 
 import 'react-native-gesture-handler'
 import useStore from '../store'
-import Sidebar from '../components/Sidebar';
+import Sidebar from '../components/Sidebar'
+import SortScreen from '../screens/SortScreen'
 
 const Stack = createStackNavigator<AppStackParamList>()
 
-
-
 const AppStack: React.FC = () => {
-    const { sidebarVisible, toggleSidebar } = useStore();
+	const { sidebarVisible, toggleSidebar } = useStore()
+	const navigation = useNavigation()
+
+	const commonHeaderOptions = {
+		headerLeft: (props) => (
+			<View style={{ padding: 10, marginBottom: 10 }}>
+				<TouchableOpacity onPress={() => navigation.navigate('Home')}>
+					<Image
+						style={{ width: 50, height: 50 }}
+						source={require('../assets/logo.png')}
+					/>
+				</TouchableOpacity>
+			</View>
+		),
+		headerTitle: (props) => null,
+		headerRight: () => (
+			<View style={{ flexDirection: 'row', marginRight: 10 }}>
+				<Button title='☰' onPress={toggleSidebar} />
+				<View style={{ width: 10 }} />
+			</View>
+		),
+		headerStyle: {
+			backgroundColor: '#fff',
+		},
+		headerTintColor: '#000',
+		headerTitleStyle: {
+			fontWeight: 'bold',
+		},
+	}
 
 	return (
 		<>
-		<Sidebar />
-		<Stack.Navigator screenOptions={{ headerShown: true }}>
-			<Stack.Screen
-				name='Home'
-				component={HomeScreen}
-				options={{
-					headerLeft: (props) => (
-						<View style={{ padding: 10, marginBottom: 10 }}>
-							<Image
-								style={{ width: 50, height: 50 }}
-								source={require('../assets/logo.png')}
-							/>
-						</View>
-					),
-					headerTitle: (props) => null,
-					headerRight: () => (
-						<View style={{ flexDirection: 'row', marginRight: 10 }}>
-							<Button
-								title='☰'
-								onPress={toggleSidebar}
-							/>
-							<View style={{ width: 10 }} />
-						</View>
-					),
-					headerStyle: {
-						backgroundColor: '#fff',
-					},
-					headerTintColor: '#000',
-					headerTitleStyle: {
-						fontWeight: 'bold',
-					},
-				}}
-			/>
-		</Stack.Navigator>
+			<Sidebar />
+			<Stack.Navigator screenOptions={{ headerShown: true }}>
+				<Stack.Screen
+					name='Home'
+					component={HomeScreen}
+					options={commonHeaderOptions}
+				/>
+				<Stack.Screen
+					name='Sort'
+					component={SortScreen}
+					options={commonHeaderOptions}
+				/>
+			</Stack.Navigator>
 		</>
 	)
 }

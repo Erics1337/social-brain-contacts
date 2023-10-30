@@ -83,7 +83,6 @@ export async function syncContacts(userId: string) {
 
 		// Initialize counts object
 		const initialCounts: { [key: string]: number } = {
-			[Category.EVERYONE]: 0,
 			[Category.INTIMATE]: 0,
 			[Category.BEST_FRIENDS]: 0,
 			[Category.GOOD_FRIENDS]: 0,
@@ -115,7 +114,6 @@ export async function syncContacts(userId: string) {
 
 		// Directly set categoryCounts based on the counts obtained while enriching contacts
 		store.initializeCategoryCounts({
-			Everyone: initialCounts[Category.EVERYONE],
 			'Close Intimates': initialCounts[Category.INTIMATE],
 			'Best Friends': initialCounts[Category.BEST_FRIENDS],
 			'Good Friends': initialCounts[Category.GOOD_FRIENDS],

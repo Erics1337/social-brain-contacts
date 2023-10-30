@@ -34,7 +34,7 @@ type State = {
 
 const useStore = create<State>((set) => ({
 	user: null,
-	binOption: 'Everyone',
+	binOption: 'Close Intimates',
 	searchTerm: null,
 	contacts: null,
 	binnedContacts: null,
@@ -42,7 +42,6 @@ const useStore = create<State>((set) => ({
 	showSearchBox: false,
 	showAccountDeleteModal: false,
 	groupLimits: {
-		[Category.EVERYONE]: 5,
 		[Category.INTIMATE]: 5,
 		[Category.BEST_FRIENDS]: 15,
 		[Category.GOOD_FRIENDS]: 50,
@@ -51,7 +50,6 @@ const useStore = create<State>((set) => ({
 		[Category.RECOGNIZABLE]: 1500,
 	},
 	categoryCounts: {
-		[Category.EVERYONE]: 0,
 		[Category.INTIMATE]: 0,
 		[Category.BEST_FRIENDS]: 0,
 		[Category.GOOD_FRIENDS]: 0,
@@ -80,7 +78,7 @@ const useStore = create<State>((set) => ({
 
 		set({
 			binnedContacts:
-				binOption !== 'Everyone' && contacts !== null
+				contacts !== null
 					? contacts.filter((contact) => contact.bin === binOption)
 					: contacts,
 		})
