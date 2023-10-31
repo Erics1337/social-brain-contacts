@@ -12,21 +12,21 @@ Social Brain Theory suggests that human social networks have a layered structure
 
 ## Key Features
 
-- Built with TypeScript for type safety and easier debugging.
-- Styled with Nativewind for a flexible, Tailwind-like styling solution.
-- State managed by Zustand for an easy-to-use and efficient state management.
-- Based on Expo SDK `49`
-- Firebase JS SDK v9 for backend email authentication
-- Custom and reusable components for ease of modifications and scalability
-- Call, Text and Email linking with expo linking library
-- Custom hook to toggle password field visibility on a TextInput for added user convenience
-- Handles server errors using Formik for robust error management
-- Login, Signup & Password Reset form built using Formik & yup
-- Handles Forgot Password Reset using Firebase email method for user-friendly password resets
-- Uses [Expo Vector Icons](https://icons.expo.fyi/) for visually appealing UI elements
-- Uses [KeyboardAwareScrollView](https://github.com/APSL/react-native-keyboard-aware-scroll-view) package to handle keyboard appearance and automatically scrolls to focused TextInput for seamless user interaction
-- Uses `dotenv` and `expo-constants` packages to manage environment variables securely
-
+-   Built with TypeScript for type safety and easier debugging.
+-   Styled with Nativewind for a flexible, Tailwind-like styling solution.
+-   State managed by Zustand for an easy-to-use and efficient state management.
+-   Based on Expo SDK `49`.
+-   Firebase JS SDK v9 for backend email authentication.
+-   Custom and reusable components for ease of modifications and scalability.
+-   Call, Text, and Email linking with expo linking library.
+-   Custom hook to toggle password field visibility on a TextInput for added user convenience.
+-   Handles server errors using Formik for robust error management.
+-   Login, Signup & Password Reset form built using Formik & yup.
+-   Handles Forgot Password Reset using Firebase email method for user-friendly password resets.
+-   Uses [Expo Vector Icons](https://icons.expo.fyi/) for visually appealing UI elements.
+-   Uses components from [React Native Elements UI Library](https://reactnativeelements.com/)
+-   Uses [KeyboardAwareScrollView](https://github.com/APSL/react-native-keyboard-aware-scroll-view) package to handle keyboard appearance and automatically scrolls to focused TextInput for seamless user interaction.
+-   Uses `dotenv` and `expo-constants` packages to manage environment variables securely.
 
 ## Installation
 
@@ -36,7 +36,7 @@ Social Brain Theory suggests that human social networks have a layered structure
 git clone https://github.com/erics1337/social-brain-contacts
 ```
 
-2. create a `.env` file with your own configuration, e.g.:
+2. Create a `.env` file with your own configuration, e.g.:
 
 ```bash
 # Rename this file to ".env" before use
@@ -49,11 +49,11 @@ MESSAGING_SENDER_ID=XXXX
 APP_ID=XXXX
 ```
 
-4. Start the project:
+3. Start the project:
 
-- `yarn ios` -- open on iOS
-- `yarn android` -- open on Android
-- `npx expo start` -- start expo server
+-   `yarn ios` -- open on iOS.
+-   `yarn android` -- open on Android.
+-   `npx expo start` -- start expo server.
 
 <!-- ## Screens
 
@@ -66,9 +66,15 @@ Main screens:
 
 [Add Screenshots of 'Social Brain Contacts' here] -->
 
+## Design
+
+Check out the design prototype for 'Social Brain Contacts' on Figma:
+[Social Brain Contacts App Prototype Design](https://www.figma.com/file/UZaw6Vam45Rs8bSPh6yWyU/Social-Brain-Contacts-App-Prototype-Design?type=whiteboard&node-id=0%3A1&t=Z7ppYn1gaq09U1dT-1)
+
 ## Related Repositories
 
-- [Social Brain Network](https://github.com/Erics1337/social-brain-network)
+-   [Social Brain Network](https://github.com/Erics1337/social-brain-network)
 
+<strong>🌟 Built by [Eric Swanson](https://ericsdevportfolio.com) using [Expo-firebase-starter](https://github.com/expo-community/expo-firebase-starter)</strong>
 
-<strong>🌟 Built by [Eric Swanson]('https://ericsdevportfolio.com')</strong> using [Expo-firebase-starter](https://github.com/expo-community/expo-firebase-starter)
+The app also uses a search bar component from [React Native Elements](https://reactnativeelements.com/).
