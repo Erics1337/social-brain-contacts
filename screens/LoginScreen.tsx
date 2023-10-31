@@ -25,10 +25,10 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const { passwordVisibility, handlePasswordVisibility, rightIcon } =
 		useTogglePasswordVisibility()
 
-	const handleLogin = (values: FormValues) => {
+	const handleLogin = async (values: FormValues) => {
 		const { email, password } = values
 		try {
-			signInWithEmailAndPassword(auth, email, password)
+			await signInWithEmailAndPassword(auth, email, password)
 		} catch (error: any) {
 			setErrorState(error.message)
 		}
