@@ -42,7 +42,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 					<View className='items-center'>
 						<Logo uri={Images.logo} />
 						<Text className='text-4xl font-bold text-black pt-5'>
-							Welcome back!
+							Sign In
 						</Text>
 					</View>
 					<Formik

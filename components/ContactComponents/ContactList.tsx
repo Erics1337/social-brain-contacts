@@ -1,9 +1,16 @@
 import React, { useState, useMemo } from 'react'
-import { FlatList, SafeAreaView, Text, View } from 'react-native'
+import {
+	FlatList,
+	SafeAreaView,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native'
 import Contact from './Contact'
 import useStore from '../../store'
 import { LoadingIndicator } from '../LoadingIndicator'
 import { SearchBar } from '@rneui/themed'
+import { useNavigation } from '@react-navigation/native'
 
 interface SearchBoxProps {
 	onChange: (text: string) => void
@@ -48,6 +55,7 @@ const ContactList: React.FC<ContactListProps> = ({
 	const { contacts, binnedContacts } = useStore()
 	const [searchTerm, setSearchTerm] = useState('')
 
+	const navigation = useNavigation()
 	const sourceContacts = filterByBin ? binnedContacts : contacts
 
 	const filteredContacts = useMemo(() => {
@@ -85,8 +93,14 @@ const ContactList: React.FC<ContactListProps> = ({
 			) : (
 				<View className='flex-1 justify-center bg-gray-100 py-5'>
 					<Text className='text-center text-xl text-gray-500'>
-						No Contacts in this group yet
+						No Contacts in this group yet.
 					</Text>
+					<TouchableOpacity
+						onPress={() => navigation.navigate('Sort')}>
+						<Text className='text-center text-primary underline text-xl my-4'>
+							Sort contacts into groups
+						</Text>
+					</TouchableOpacity>
 				</View>
 			)}
 		</SafeAreaView>
