@@ -1,4 +1,4 @@
-export const Colors: { [color: string]: string } = {
+const Colors = {
   primary: '#68c7ac',
   secondary: '#039be5',
   black: '#222222',
@@ -7,4 +7,8 @@ export const Colors: { [color: string]: string } = {
   lightGrey: '#f9f9f9',
   mediumGrey: '#6e6869',
   red: '#fc5c65',
+};
+
+module.exports = {
+  Colors
 };

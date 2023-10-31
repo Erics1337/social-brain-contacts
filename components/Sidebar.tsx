@@ -78,26 +78,33 @@ const Sidebar: React.FC = () => {
 					<Text style={{ fontSize: 24 }}>X</Text>
 				</TouchableOpacity>
 				<View style={{ flexDirection: 'column' }}>
-					<Button
-						title='Sort Contacts'
+					<TouchableOpacity
+						className='bg-primary py-2 px-4 rounded'
 						onPress={() => {
 							navigation.navigate('Sort')
 							toggleSidebar()
-						}}
-					/>
-					<Button
-						title='Account'
-						onPress={() => setShowAccountSidebar(true)}
-					/>
-					<Button
-						title='About'
-						onPress={() => setShowAboutSidebar(true)}
-					/>
-					<Button
-						title='Sign Out'
-						onPress={handleLogout}
-						color='#000'
-					/>
+						}}>
+						<Text className='text-white text-center text-xl'>
+							Sort Contacts
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={{ marginBottom: 10 }}
+						onPress={() => setShowAccountSidebar(true)}>
+						<Text className='text-primary text-center text-xl'>
+							Account
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={{ marginBottom: 10 }}
+						onPress={() => setShowAboutSidebar(true)}>
+						<Text className='text-primary text-center text-xl'>About</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={{ marginBottom: 10 }}
+						onPress={() => handleLogout()}>
+						<Text className='text-center text-xl'>Sign Out</Text>
+					</TouchableOpacity>
 				</View>
 			</Animated.View>
 
