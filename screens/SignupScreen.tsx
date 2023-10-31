@@ -21,7 +21,7 @@ type Props = {
 } & StackScreenProps<AuthStackParamList, 'Signup'>
 
 const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
-	const [errorState, setErrorState] = useState('')
+	const [errorState, setErrorState] = useState<any | null>(null);
 	const [isLoading, setIsLoading] = useState(false)
 
 	const {
@@ -53,7 +53,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 				})
 			}
 		} catch (error: any) {
-			setErrorState(error.message)
+			setErrorState(error)
 		} finally {
 			setIsLoading(false) // Stop loading
 		}

@@ -9,6 +9,7 @@ import { sendPasswordResetEmail } from 'firebase/auth'
 import { passwordResetSchema } from '../utils'
 import { Colors, auth } from '../config'
 import { View, TextInput, Button, FormErrorMessage } from '../components'
+import { ActivityIndicator } from 'react-native'
 
 type AuthStackParamList = {
 	Welcome: undefined
@@ -22,17 +23,21 @@ type Props = {
 } & StackScreenProps<AuthStackParamList, 'ForgotPassword'>
 
 const ForgotPasswordScreen: React.FC<Props> = ({ navigation }: Props) => {
-	const [errorState, setErrorState] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
+	const [errorState, setErrorState] = useState<any | null>(null)
 
-	const handleSendPasswordResetEmail = (values: FormikValues) => {
+	const handleSendPasswordResetEmail = async (values: FormikValues) => {
 		const { email } = values
-
-		sendPasswordResetEmail(auth, email)
-			.then(() => {
-				console.log('Success: Password Reset Email sent.')
-				navigation.navigate('Login')
-			})
-			.catch((error) => setErrorState(error.message))
+		setIsLoading(true) // Start loading
+		try {
+			await sendPasswordResetEmail(auth, email)
+			console.log('Success: Password Reset Email sent.')
+			navigation.navigate('Login')
+		} catch (error) {
+			setErrorState(error)
+		} finally {
+			setIsLoading(false) // Stop loading
+		}
 	}
 
 	return (
@@ -83,10 +88,16 @@ const ForgotPasswordScreen: React.FC<Props> = ({ navigation }: Props) => {
 						<Button
 							style={{ backgroundColor: Colors.primary }}
 							className='w-full items-center justify-center mt-2 py-2 rounded-lg'
-							onPress={handleSubmit}>
-							<Text className='text-lg text-white font-bold'>
-								Send Reset Email
-							</Text>
+							onPress={handleSubmit}
+							disabled={isLoading} // Disable button while loading
+						>
+							{isLoading ? (
+								<ActivityIndicator size='small' color='#FFF' />
+							) : (
+								<Text className='text-lg text-white font-bold'>
+									Send Reset Email
+								</Text>
+							)}
 						</Button>
 					</>
 				)}

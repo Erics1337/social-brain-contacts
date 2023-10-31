@@ -22,7 +22,7 @@ type Props = {
 }
 
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
-	const [errorState, setErrorState] = useState('')
+	const [errorState, setErrorState] = useState<any | null>(null);
 	const [isLoading, setIsLoading] = useState(false)
 
 	const { passwordVisibility, handlePasswordVisibility, rightIcon } =
@@ -34,7 +34,7 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 		try {
 			await signInWithEmailAndPassword(auth, email, password)
 		} catch (error: any) {
-			setErrorState(error.message)
+			setErrorState(error)
 		} finally {
 			setIsLoading(false) // Stop loading
 		}
