@@ -10,6 +10,7 @@ import { Images, Colors, auth } from '../config'
 import { useTogglePasswordVisibility } from '../hooks/useTogglePasswordVisibility'
 import { AuthStackParamList } from '../types'
 import { loginValidationSchema } from '../utils'
+import { ActivityIndicator } from 'react-native'
 
 interface FormValues {
 	email: string
@@ -22,15 +23,20 @@ type Props = {
 
 const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [errorState, setErrorState] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
+
 	const { passwordVisibility, handlePasswordVisibility, rightIcon } =
 		useTogglePasswordVisibility()
 
 	const handleLogin = async (values: FormValues) => {
 		const { email, password } = values
+		setIsLoading(true) // Start loading
 		try {
 			await signInWithEmailAndPassword(auth, email, password)
 		} catch (error: any) {
 			setErrorState(error.message)
+		} finally {
+			setIsLoading(false) // Stop loading
 		}
 	}
 
@@ -111,10 +117,19 @@ const LoginScreen: React.FC<Props> = ({ navigation }: Props) => {
 								<Button
 									style={{ backgroundColor: Colors.primary }}
 									className='w-full justify-center items-center mt-2 p-4 rounded'
-									onPress={handleSubmit}>
-									<Text className='text-white text-lg font-bold'>
-										Login
-									</Text>
+									onPress={handleSubmit}
+									disabled={isLoading} // Disable button while loading
+								>
+									{isLoading ? (
+										<ActivityIndicator
+											size='small'
+											color='#FFF'
+										/>
+									) : (
+										<Text className='text-white text-lg font-bold'>
+											Login
+										</Text>
+									)}
 								</Button>
 							</React.Fragment>
 						)}

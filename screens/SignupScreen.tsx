@@ -14,6 +14,7 @@ import { signupValidationSchema } from '../utils'
 import { AuthStackParamList } from '../types'
 import { db } from '../config/firebase'
 import { doc, setDoc } from 'firebase/firestore'
+import { ActivityIndicator } from 'react-native'
 
 type Props = {
 	navigation: StackNavigationProp<AuthStackParamList, 'Signup'>
@@ -21,6 +22,7 @@ type Props = {
 
 const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 	const [errorState, setErrorState] = useState('')
+	const [isLoading, setIsLoading] = useState(false)
 
 	const {
 		passwordVisibility,
@@ -37,16 +39,13 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 		confirmPassword?: string
 	}) => {
 		const { email, password } = values
-
+		setIsLoading(true) // Start loading
 		try {
 			const { user } = await createUserWithEmailAndPassword(
 				auth,
 				email,
 				password
 			)
-
-			// At this point, the user has been created in the Authentication part of Firebase.
-			// Now, let's create a user document in the Firestore database.
 			if (user) {
 				const userDoc = doc(db, 'users', user.uid)
 				await setDoc(userDoc, {
@@ -55,6 +54,8 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 			}
 		} catch (error: any) {
 			setErrorState(error.message)
+		} finally {
+			setIsLoading(false) // Stop loading
 		}
 	}
 
@@ -156,10 +157,19 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 							<Button
 								className='w-full items-center justify-center mt-2 py-2 rounded-lg'
 								style={{ backgroundColor: Colors.primary }}
-								onPress={handleSubmit}>
-								<Text className='text-lg text-white font-bold'>
-									Signup
-								</Text>
+								onPress={handleSubmit}
+								disabled={isLoading} // Disable button while loading
+							>
+								{isLoading ? (
+									<ActivityIndicator
+										size='small'
+										color='#FFF'
+									/>
+								) : (
+									<Text className='text-lg text-white font-bold'>
+										Signup
+									</Text>
+								)}
 							</Button>
 						</>
 					)}
