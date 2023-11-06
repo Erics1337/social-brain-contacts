@@ -125,7 +125,7 @@ const ContactList: React.FC<ContactListProps> = ({
 			) : filteredContacts.length > 0 ? (
 				<FlatList
 					data={filteredContacts}
-					keyExtractor={(item) => item.id}
+					keyExtractor={(item) => item.id.toString()}
 					renderItem={({ item }) => <Contact contact={item} />}
 					showsVerticalScrollIndicator={true}
 				/>

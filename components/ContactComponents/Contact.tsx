@@ -17,7 +17,7 @@ type ContactProps = {
 	contact: OverloadedExpoContact
 }
 
-const Contact: React.FC<ContactProps> = ({ contact }) => {
+const Contact = React.memo(({ contact }: ContactProps) => {
 	const firstName = contact.firstName ?? ''
 	const lastName = contact.lastName ?? ''
 
@@ -109,6 +109,6 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 			</View>
 		</TouchableOpacity>
 	)
-}
+})
 
 export default Contact
