@@ -77,45 +77,23 @@ export const CategoriesModal = (props: {
 	}: CategoryOptionProps) => {
 		return (
 			<TouchableOpacity
-				style={{ padding: 10 }} // Replaced className with inline style for demonstration purposes
+				className='bg-primary rounded-full my-1 p-2'
 				onPress={() => handleOptionSelect(category)}>
-				<Text style={{ fontSize: 16 }}>{category}</Text>
+				<Text className='text-white text-center text-lg'>
+					{category}
+				</Text>
 			</TouchableOpacity>
 		)
 	}
 
 	return (
-		<Modal
-			visible={true}
-			transparent={true}
-			animationType='fade'>
+		<Modal visible={true} transparent={true} animationType='fade'>
 			<TouchableWithoutFeedback onPress={handleModalClose}>
-				<View
-					style={{
-						flex: 1,
-						justifyContent: 'center',
-						alignItems: 'center',
-						backgroundColor: 'rgba(0, 0, 0, 0.5)',
-					}}>
-					<Pressable>
-						<View
-							style={{
-								backgroundColor: 'white',
-								padding: 16,
-								borderRadius: 8,
-								shadowColor: '#000',
-								shadowOffset: { width: 0, height: 2 },
-								shadowOpacity: 0.25,
-								shadowRadius: 3.84,
-								elevation: 5,
-							}}>
-							<Text
-								style={{
-									fontSize: 24,
-									fontWeight: 'bold',
-									marginBottom: 16,
-								}}>
-								Select Option
+				<View className='flex-1 justify-center items-center bg-black bg-opacity-50'>
+					<Pressable className='bg-white p-4 rounded-lg shadow-lg'>
+						<View className='w-full'>
+							<Text className='text-3xl font-bold mb-4 text-center'>
+								Move contact to group:
 							</Text>
 							{Object.keys(groupLimits).map((category, index) => (
 								<CategoryOption
@@ -125,9 +103,9 @@ export const CategoriesModal = (props: {
 								/>
 							))}
 							<TouchableOpacity
-								style={{ padding: 10 }} // Replaced className with inline style for demonstration purposes
+								className='p-2'
 								onPress={handleModalClose}>
-								<Text style={{ fontSize: 16, color: 'red' }}>
+								<Text className='text-lg text-red-500 text-center'>
 									Cancel
 								</Text>
 							</TouchableOpacity>
@@ -138,3 +116,5 @@ export const CategoriesModal = (props: {
 		</Modal>
 	)
 }
+
+export default CategoriesModal
