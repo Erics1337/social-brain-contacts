@@ -20,6 +20,7 @@ type State = {
 	showAccountDeleteModal: boolean | null
 	categoryCounts: CategoryCounts
 	groupLimits: CategoryCounts
+	loading: boolean | null
 	setUser: (user: User | null) => void
 	setBin: (bin: string) => void
 	setSearchTerm: (searchTerm: string) => void
@@ -33,6 +34,7 @@ type State = {
 }
 
 const useStore = create<State>((set) => ({
+	loading: false,
 	user: null,
 	binOption: 'Close Intimates',
 	searchTerm: null,

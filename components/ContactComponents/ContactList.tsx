@@ -16,6 +16,13 @@ interface SearchBoxProps {
 	onChange: (text: string) => void
 }
 
+interface ContactType {
+	id: string
+	firstName?: string // Optional because it could be undefined
+	lastName?: string // Optional because it could be undefined
+	bin?: string
+}
+
 const SearchBox: React.FC<SearchBoxProps> = ({ onChange }) => {
 	const [localSearch, setLocalSearch] = useState('')
 
@@ -52,38 +59,70 @@ const ContactList: React.FC<ContactListProps> = ({
 	filterByBin = false,
 	showUngrouped = false,
 }) => {
-	const { contacts, binnedContacts } = useStore()
+	const navigation = useNavigation()
+
+	const getContactDisplayName = (contact: ContactType) => {
+		const parts = []
+		if (contact.firstName && contact.firstName !== 'undefined')
+			parts.push(contact.firstName)
+		if (contact.lastName && contact.lastName !== 'undefined')
+			parts.push(contact.lastName)
+		return parts.length > 0 ? parts.join(' ') : null
+	}
+
+	const { contacts, binnedContacts, loading } = useStore((state) => ({
+		contacts: state.contacts,
+		binnedContacts: state.binnedContacts,
+		loading: state.loading, // Assuming you have a 'loading' boolean in your store
+	}))
+
 	const [searchTerm, setSearchTerm] = useState('')
 
-	const navigation = useNavigation()
-	const sourceContacts = filterByBin ? binnedContacts : contacts
-
 	const filteredContacts = useMemo(() => {
+		let sourceContacts = filterByBin ? binnedContacts : contacts
+
 		if (!sourceContacts) return []
 
-		const ungroupedContacts = showUngrouped
-			? sourceContacts.filter((contact) => !contact.bin)
-			: sourceContacts
+		if (showUngrouped) {
+			sourceContacts = sourceContacts.filter((contact) => !contact.bin)
+		}
+
+		// Filter out contacts with no name defined at all
+		sourceContacts = sourceContacts.filter(
+			(contact) => getContactDisplayName(contact) !== null
+		)
 
 		if (searchTerm === '') {
-			return ungroupedContacts
+			return sourceContacts
 		}
 
 		const searchTerms = searchTerm
 			.split(' ')
 			.map((term) => term.toLowerCase())
 
-		return ungroupedContacts.filter((contact) =>
-			searchTerms.every((term) =>
-				contact.name.toLowerCase().includes(term)
+		// Finally, filter by search term
+		return sourceContacts.filter((contact) => {
+			const displayName = getContactDisplayName(contact)
+			return (
+				displayName &&
+				searchTerms.every((term) =>
+					displayName.toLowerCase().includes(term)
+				)
 			)
-		)
-	}, [sourceContacts, searchTerm, showUngrouped])
+		})
+	}, [contacts, binnedContacts, searchTerm, filterByBin, showUngrouped])
+
+	// Determine if the loading indicator should be shown
+	const showLoadingIndicator = useMemo(() => {
+		return loading || contacts === null
+	}, [loading, contacts])
 
 	return (
 		<SafeAreaView className='flex-1 bg-white'>
 			<SearchBox onChange={setSearchTerm} />
-			{filteredContacts.length > 0 ? (
+			{showLoadingIndicator ? (
+				<LoadingIndicator />
+			) : filteredContacts.length > 0 ? (
 				<FlatList
 					data={filteredContacts}
 					keyExtractor={(item) => item.id}

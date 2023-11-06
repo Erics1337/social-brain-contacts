@@ -21,20 +21,25 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 	const firstName = contact.firstName ?? ''
 	const lastName = contact.lastName ?? ''
 
-	const getInitials = (firstName: string, lastName: string) => {
-		let firstInitial = ''
-		let lastInitial = ''
-		if (
-			firstName &&
-			typeof firstName === 'string' &&
-			firstName.length > 0
-		) {
-			firstInitial = firstName[0]
+	const getFullName = (firstName?: string, lastName?: string) => {
+		// Filter out undefined or empty strings and join the remaining with a space
+		return [firstName, lastName].filter(Boolean).join(' ')
+	}
+
+	const fullName = getFullName(contact.firstName, contact.lastName)
+
+	const getInitials = (firstName?: string, lastName?: string) => {
+		let initials = ''
+
+		if (firstName && firstName.length > 0) {
+			initials += firstName[0].toUpperCase()
 		}
-		if (lastName && typeof lastName === 'string' && lastName.length > 0) {
-			lastInitial = lastName[0]
+
+		if (lastName && lastName.length > 0) {
+			initials += lastName[0].toUpperCase()
 		}
-		return firstInitial + lastInitial
+
+		return initials
 	}
 
 	const initials = getInitials(firstName, lastName)
@@ -72,7 +77,6 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 		} else console.log('no contact email found')
 	}
 
-
 	const handleLongPress = () => {
 		setIsModalVisible(true) // Open modal for this specific contact
 	}
@@ -86,7 +90,7 @@ const Contact: React.FC<ContactProps> = ({ contact }) => {
 			<View className='flex flex-row items-center justify-between p-4 border-b border-gray-200'>
 				<Avatar initials={initials} />
 				<View className='flex-1 mx-3'>
-					<Text className='text-lg font-bold ml-4'>{`${contact.firstName} ${contact.lastName}`}</Text>
+					<Text className='text-lg font-bold ml-4'>{fullName}</Text>
 				</View>
 				<ActionIcons
 					onCall={handleCall}
