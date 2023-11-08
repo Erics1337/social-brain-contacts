@@ -76,5 +76,3 @@ Check out the design prototype for 'Social Brain Contacts' on Figma:
 -   [Social Brain Network](https://github.com/Erics1337/social-brain-network)
 
 <strong>🌟 Built by [Eric Swanson](https://ericsdevportfolio.com) using [Expo-firebase-starter](https://github.com/expo-community/expo-firebase-starter)</strong>
-
-The app also uses a search bar component from [React Native Elements](https://reactnativeelements.com/).
