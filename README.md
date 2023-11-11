@@ -4,6 +4,9 @@
 ![Supports Expo Android](https://img.shields.io/badge/Android-4630EB.svg?style=flat-square&logo=ANDROID&labelColor=A4C639&logoColor=fff)
 [![runs with Expo Go](https://img.shields.io/badge/Runs%20with%20Expo%20Go-4630EB.svg?style=flat-square&logo=EXPO&labelColor=f3f3f3&logoColor=000)](https://expo.dev/client)
 
+![alt text](assets/b97486ff-f3a0-42e3-8676-cccf2b783ae0.webp)
+
+
 'Social Brain Contacts' is a react-native expo app that utilizes research in social brain theory to provide tools to users to group their phone contacts into bins. This app aims to help users manage and understand their social relationships better.
 
 ## About Social Brain Theory
