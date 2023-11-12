@@ -45,7 +45,7 @@ const useStore = create<State>((set) => ({
 	sidebarVisible: false,
 	showSearchBox: false,
 	showAccountDeleteModal: false,
-	showIntroSlider: true,
+	showIntroSlider: false,
 	groupLimits: {
 		[Category.INTIMATE]: 5,
 		[Category.BEST_FRIENDS]: 15,
