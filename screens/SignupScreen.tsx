@@ -15,14 +15,16 @@ import { AuthStackParamList } from '../types'
 import { db } from '../config/firebase'
 import { doc, setDoc } from 'firebase/firestore'
 import { ActivityIndicator } from 'react-native'
+import useStore from '../store'
 
 type Props = {
 	navigation: StackNavigationProp<AuthStackParamList, 'Signup'>
 } & StackScreenProps<AuthStackParamList, 'Signup'>
 
 const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
-	const [errorState, setErrorState] = useState<any | null>(null);
+	const [errorState, setErrorState,] = useState<any | null>(null);
 	const [isLoading, setIsLoading] = useState(false)
+	const {toggleIntroSlider} = useStore()
 
 	const {
 		passwordVisibility,
@@ -47,6 +49,7 @@ const SignupScreen: React.FC<Props> = ({ navigation }: Props) => {
 				password
 			)
 			if (user) {
+				toggleIntroSlider()
 				const userDoc = doc(db, 'users', user.uid)
 				await setDoc(userDoc, {
 					email,

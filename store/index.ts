@@ -21,6 +21,8 @@ type State = {
 	categoryCounts: CategoryCounts
 	groupLimits: CategoryCounts
 	loading: boolean | null
+	showIntroSlider: boolean | null
+	toggleIntroSlider: () => void
 	setUser: (user: User | null) => void
 	setBin: (bin: string) => void
 	setSearchTerm: (searchTerm: string) => void
@@ -43,6 +45,7 @@ const useStore = create<State>((set) => ({
 	sidebarVisible: false,
 	showSearchBox: false,
 	showAccountDeleteModal: false,
+	showIntroSlider: true,
 	groupLimits: {
 		[Category.INTIMATE]: 5,
 		[Category.BEST_FRIENDS]: 15,
@@ -58,6 +61,11 @@ const useStore = create<State>((set) => ({
 		[Category.CASUAL_FRIENDS]: 0,
 		[Category.ACQUAINTANCES]: 0,
 		[Category.RECOGNIZABLE]: 0,
+	},
+	toggleIntroSlider: () => {
+		set((state) => ({
+			showIntroSlider: !state.showIntroSlider,
+		}))
 	},
 	setUser: (user) => set({ user }),
 	setBin: (binOption) => {

@@ -9,9 +9,10 @@ import { auth } from '../config'
 import navigationTheme from './navigationTheme'
 import { syncContacts } from '../services/contactService'
 import { onAuthStateChanged } from 'firebase/auth'
+import AppIntroSlider from '../components/AppIntroSlider'
 
 const Routes: React.FC = () => {
-	const { user, setUser } = useStore()
+	const { user, setUser, showIntroSlider } = useStore()
 	const [isLoading, setIsLoading] = useState(true)
 
 	useEffect(() => {
@@ -44,7 +45,15 @@ const Routes: React.FC = () => {
 
 	return (
 		<NavigationContainer theme={navigationTheme}>
-			{user ? <AppStack /> : <AuthStack />}
+			{user ? (
+				showIntroSlider ? (
+					<AppIntroSlider />
+				) : (
+					<AppStack />
+				)
+			) : (
+				<AuthStack />
+			)}
 		</NavigationContainer>
 	)
 }
