@@ -30,7 +30,7 @@ const slides: Slide[] = [
 	{
 		key: 'slide3',
 		title: 'What is Social Brain theory?',
-		text: 'Social Brain Theory suggests that human social networks have a layered structure where each individual has around 5 intimate relationships (e.g. romantic partners, best friends), 15 best friends, 50 good friends, 150 friends, and so on.',
+		text: 'Social Brain Theory suggests that human social networks have a layered structure where each individual has around 5 intimate relationships (e.g. romantic partners, close friends), 15 best friends, 50 good friends, 150 friends, and so on.',
 		backgroundColor: '#4caf50',
 		graphic: SlideGraphics.theory, // Update path to actual graphic file
 	},
