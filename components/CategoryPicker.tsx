@@ -22,6 +22,7 @@ const CategoryPicker: React.FC<{}> = () => {
 				<Picker.Item
 					label={`${value} ${categoryCounts[value]}/${groupLimits[value]}`}
 					value={value}
+					key={key}
 				/>
 			))}
 		</Picker>
