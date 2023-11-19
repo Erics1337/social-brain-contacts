@@ -4,7 +4,7 @@ import React from 'react'
 
 import HomeScreen from '../screens/HomeScreen'
 import { AppStackParamList } from '../types'
-import { Button, Image, TouchableOpacity, View } from 'react-native'
+import { Button, Image, Text, TouchableOpacity, View } from 'react-native'
 
 import 'react-native-gesture-handler'
 import useStore from '../store'
@@ -18,7 +18,7 @@ const AppStack: React.FC = () => {
 	const navigation = useNavigation()
 
 	const commonHeaderOptions = {
-		headerLeft: (props) => (
+		headerLeft: () => (
 			<View style={{ padding: 10, marginBottom: 10 }}>
 				<TouchableOpacity onPress={() => navigation.navigate('Home')}>
 					<Image
@@ -28,11 +28,12 @@ const AppStack: React.FC = () => {
 				</TouchableOpacity>
 			</View>
 		),
-		headerTitle: (props) => null,
+		headerTitle: () => null,
 		headerRight: () => (
-			<View style={{ flexDirection: 'row', marginRight: 10 }}>
-				<Button title='☰' onPress={toggleSidebar} />
-				<View style={{ width: 10 }} />
+			<View style={{ flexDirection: "row", marginRight: 20 }}>
+				<TouchableOpacity onPress={toggleSidebar}>
+					<Text style={{ fontSize: 35 }}>☰</Text>
+				</TouchableOpacity>
 			</View>
 		),
 		headerStyle: {
