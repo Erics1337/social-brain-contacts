@@ -9,11 +9,13 @@ import { auth } from '../config'
 import navigationTheme from './navigationTheme'
 import { syncContacts } from '../services/contactService'
 import { onAuthStateChanged } from 'firebase/auth'
-import AppIntroSlider from '../components/AppIntroSlider'
+import AppIntroSliderScreen from '../components/AppIntroSlider'
+import { CopilotProvider } from 'react-native-copilot'
 
 const Routes: React.FC = () => {
-	const { user, setUser, showIntroSlider } = useStore()
+	const { user, setUser, showIntroSlider, toggleIntroSlider } = useStore()
 	const [isLoading, setIsLoading] = useState(true)
+	const [appIntroDone, setAppIntroDone] = useState(true)
 
 	useEffect(() => {
 		const unsubscribeAuthStateChanged = onAuthStateChanged(
@@ -39,6 +41,17 @@ const Routes: React.FC = () => {
 		}
 	}, [user])
 
+	const style = {
+		backgroundColor: '#9FA8DA',
+		borderRadius: 10,
+		paddingTop: 5,
+	}
+
+	const onAppIntroDone = () => {
+		toggleIntroSlider()
+		setAppIntroDone(true)
+	}
+
 	if (isLoading) {
 		return <LoadingIndicator />
 	}
@@ -47,9 +60,11 @@ const Routes: React.FC = () => {
 		<NavigationContainer theme={navigationTheme}>
 			{user ? (
 				showIntroSlider ? (
-					<AppIntroSlider />
+					<AppIntroSliderScreen onDone={onAppIntroDone} />
 				) : (
-					<AppStack />
+					<CopilotProvider overlay='svg' tooltipStyle={style}>
+						<AppStack appIntroIsDone={appIntroDone} />
+					</CopilotProvider>
 				)
 			) : (
 				<AuthStack />
