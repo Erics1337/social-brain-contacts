@@ -1,44 +1,44 @@
-import { create } from 'zustand'
-import { User } from '@firebase/auth'
-import { OverloadedExpoContact } from '../types'
-import { collection, doc, updateDoc } from 'firebase/firestore'
-import { db } from '../config/firebase'
-import { Category } from '../utils'
+import { create } from "zustand";
+import { User } from "@firebase/auth";
+import { OverloadedExpoContact } from "../types";
+import { collection, doc, updateDoc } from "firebase/firestore";
+import { db } from "../config/firebase";
+import { Category } from "../utils";
 
 type CategoryCounts = {
-	[key in Category]: number
-}
+	[key in Category]: number;
+};
 
 type State = {
-	user: User | null
-	binOption: string | null
-	searchTerm: string | null
-	contacts: OverloadedExpoContact[] | null
-	binnedContacts: OverloadedExpoContact[] | null
-	showSearchBox: boolean | null
-	sidebarVisible: boolean | null
-	showAccountDeleteModal: boolean | null
-	categoryCounts: CategoryCounts
-	groupLimits: CategoryCounts
-	loading: boolean | null
-	showIntroSlider: boolean | null
-	toggleIntroSlider: () => void
-	setUser: (user: User | null) => void
-	setBin: (bin: string) => void
-	setSearchTerm: (searchTerm: string) => void
-	setContacts: (contacts: OverloadedExpoContact[]) => void
-	setBinnedContacts: () => void
-	updateContact: (contactId: string, bin: string) => void
-	toggleShowSearchBox: () => void
-	toggleSidebar: () => void
-	toggleAccountDeleteModal: () => void
-	initializeCategoryCounts: (initialCounts: CategoryCounts) => void
-}
+	user: User | null;
+	binOption: string | null;
+	searchTerm: string | null;
+	contacts: OverloadedExpoContact[] | null;
+	binnedContacts: OverloadedExpoContact[] | null;
+	showSearchBox: boolean | null;
+	sidebarVisible: boolean | null;
+	showAccountDeleteModal: boolean | null;
+	categoryCounts: CategoryCounts;
+	groupLimits: CategoryCounts;
+	loading: boolean | null;
+	showIntroSlider: boolean | null;
+	toggleIntroSlider: () => void;
+	setUser: (user: User | null) => void;
+	setBin: (bin: string) => void;
+	setSearchTerm: (searchTerm: string) => void;
+	setContacts: (contacts: OverloadedExpoContact[]) => void;
+	setBinnedContacts: () => void;
+	updateContact: (contactId: string, bin: string) => void;
+	toggleShowSearchBox: () => void;
+	toggleSidebar: () => void;
+	toggleAccountDeleteModal: () => void;
+	initializeCategoryCounts: (initialCounts: CategoryCounts) => void;
+};
 
 const useStore = create<State>((set) => ({
 	loading: false,
 	user: null,
-	binOption: 'Close Intimates',
+	binOption: "Close Intimates",
 	searchTerm: null,
 	contacts: null,
 	binnedContacts: null,
@@ -62,40 +62,40 @@ const useStore = create<State>((set) => ({
 		[Category.ACQUAINTANCES]: 0,
 		[Category.RECOGNIZABLE]: 0,
 	},
-	toggleIntroSlider: () => {
+	toggleIntroSlider: (show?: boolean) => {
 		set((state) => ({
-			showIntroSlider: !state.showIntroSlider,
-		}))
+			showIntroSlider: show ?? !state.showIntroSlider,
+		}));
 	},
 	setUser: (user) => set({ user }),
 	setBin: (binOption) => {
-		set({ binOption })
-		useStore.getState().setBinnedContacts()
+		set({ binOption });
+		useStore.getState().setBinnedContacts();
 	},
 	setSearchTerm: (searchTerm) => {
-		set({ searchTerm })
+		set({ searchTerm });
 	},
 	setContacts: (contacts) => {
 		// Contacts should be sorted by name from the firebase query fired on Auth load by RootNavigator
-		set({ contacts })
-		set({ binnedContacts: contacts })
+		set({ contacts });
+		set({ binnedContacts: contacts });
 	},
 	setBinnedContacts: () => {
-		console.log('setting filtered contacts to state')
+		console.log("setting filtered contacts to state");
 		// Get the current bin from the Zustand store
-		set({ binnedContacts: null })
-		const { binOption, contacts } = useStore.getState()
+		set({ binnedContacts: null });
+		const { binOption, contacts } = useStore.getState();
 
 		set({
 			binnedContacts:
 				contacts !== null
 					? contacts.filter((contact) => contact.bin === binOption)
 					: contacts,
-		})
+		});
 	},
 
 	initializeCategoryCounts: (initialCounts: CategoryCounts) => {
-		set({ categoryCounts: initialCounts })
+		set({ categoryCounts: initialCounts });
 	},
 	toggleShowSearchBox: () =>
 		set((state) => ({ showSearchBox: !state.showSearchBox })),
@@ -109,51 +109,50 @@ const useStore = create<State>((set) => ({
 		set((state) => {
 			const updatedContacts = (state.contacts || []).map((contact) =>
 				contact.id === contactId ? { ...contact, bin: newBin } : contact
-			)
+			);
 			const oldContact = (state.contacts || []).find(
 				(contact) => contact.id === contactId
-			)
-			const oldBin = oldContact ? oldContact.bin : null
+			);
+			const oldBin = oldContact ? oldContact.bin : null;
 			// Initialize categoryCounts if it doesn't exist
-			const updatedCategoryCounts: CategoryCounts =
-				state.categoryCounts || {}
+			const updatedCategoryCounts: CategoryCounts = state.categoryCounts || {};
 			// Decrement count for old bin if applicable
 			if (oldBin) {
 				updatedCategoryCounts[oldBin as Category] =
-					(updatedCategoryCounts[oldBin as Category] || 1) - 1
+					(updatedCategoryCounts[oldBin as Category] || 1) - 1;
 			}
 			// Increment count for new bin
 			updatedCategoryCounts[newBin as Category] =
-				(updatedCategoryCounts[newBin as Category] || 0) + 1
+				(updatedCategoryCounts[newBin as Category] || 0) + 1;
 			return {
 				contacts: updatedContacts,
 				filteredContacts: null,
 				categoryCounts: updatedCategoryCounts,
-			}
-		})
+			};
+		});
 		// Re-filter the contacts
-		useStore.getState().setBinnedContacts()
+		useStore.getState().setBinnedContacts();
 		// Update firebase
-		updateContactInFirebase(contactId, newBin)
+		updateContactInFirebase(contactId, newBin);
 	},
-}))
+}));
 
 // Other Functions
 
 const updateContactInFirebase = (contactId: string, bin: string) => {
 	// Assuming you have a "contacts" collection in Firestore
-	const userId = useStore.getState().user?.uid
-	const userContactsRef = collection(db, 'users', userId ?? '', 'contacts')
-	const contactRef = doc(userContactsRef, contactId)
+	const userId = useStore.getState().user?.uid;
+	const userContactsRef = collection(db, "users", userId ?? "", "contacts");
+	const contactRef = doc(userContactsRef, contactId);
 
 	// Update the "bin" field of the contact document
 	updateDoc(contactRef, { bin: bin })
 		.then(() => {
-			console.log('Contact updated in Firebase successfully.')
+			console.log("Contact updated in Firebase successfully.");
 		})
 		.catch((error) => {
-			console.error('Error updating contact in Firebase:', error)
-		})
-}
+			console.error("Error updating contact in Firebase:", error);
+		});
+};
 
-export default useStore
+export default useStore;
