@@ -53,18 +53,22 @@ const ContactList: React.FC<ContactListProps> = ({
 
 		if (!sourceContacts) return []
 
+		// Show all contacts
 		if (showUngrouped) {
 			sourceContacts = sourceContacts.filter((contact) => !contact.bin)
 		}
 
+		// Filter out contacts without a name
 		sourceContacts = sourceContacts.filter(
 			(contact) => getContactDisplayName(contact) !== null
 		)
 
+		// Guard clause to prevent filtering if there is no search term
 		if (!searchTerm || searchTerm === "") {
 			return sourceContacts
 		}
 
+		// Filter out contacts that don't match the search term
 		const searchTerms = searchTerm.split(" ").map((term) => term.toLowerCase())
 
 		return sourceContacts.filter((contact) => {
