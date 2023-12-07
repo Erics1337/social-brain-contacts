@@ -109,7 +109,7 @@ const DeleteUserModal = () => {
 						className='bg-white rounded-lg flex-row p-3 my-3 w-full border border-gray-400'
 					/>
 					<TouchableOpacity
-						className='mt-4 bg-red-600 p-3 rounded-lg'
+						className='mt-4 bg-red p-3 rounded-lg'
 						onPress={confirmAndDelete}>
 						<Text className='text-white text-center'>
 							Confirm Deletion
