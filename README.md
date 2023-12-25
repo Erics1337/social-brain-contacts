@@ -59,16 +59,6 @@ APP_ID=XXXX
 -   `yarn android` -- open on Android.
 -   `npx expo start` -- start expo server.
 
-<!-- ## Screens
-
-Main screens:
-
-- Login
-- Signup
-- Forgot password
-- Home
-
-[Add Screenshots of 'Social Brain Contacts' here] -->
 
 ## Design
 
