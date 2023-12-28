@@ -63,9 +63,10 @@ const useStore = create<State>((set) => ({
 		[Category.RECOGNIZABLE]: 0,
 	},
 	toggleIntroSlider: (show?: boolean) => {
-		set((state) => ({
-			showIntroSlider: show ?? !state.showIntroSlider,
-		}))
+		set((state) => {
+			console.log("Current showIntroSlider state:", state.showIntroSlider);
+			return { showIntroSlider: !state.showIntroSlider };
+		});
 	},
 	setUser: (user) => set({ user }),
 	setBin: (binOption) => {
