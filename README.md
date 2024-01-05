@@ -9,9 +9,7 @@
 
 'Social Brain Contacts' is a react-native expo app that utilizes research in social brain theory to provide tools to users to group their phone contacts into bins. This app aims to help users manage and understand their social relationships better.
 
-## About Social Brain Theory
-
-Social Brain Theory suggests that human social networks have a layered structure where each individual has around 5 intimate relationships (e.g. romantic partners, best friends), 15 best friends, 50 good friends, 150 friends, and so on. These layers, sometimes referred to as 'Dunbar's Numbers', are thought to be cognitively constrained by the size of our brains. 'Social Brain Contacts' takes this research into account to provide users with tools to sort their contacts, helping them manage and reflect upon their social relationships.
+[Visit the product landing page](https://socialbraincontacts.com)
 
 ## Key Features
 
