@@ -1,12 +1,12 @@
 import 'dotenv/config'
-
+// Update expo/version before ios build/submit and expo/android/versioncode for android build/submit
 export default {
 	expo: {
 		name: 'Social Brain Contacts',
 		slug: 'social-brain-contacts',
 		privacy: 'public',
 		platforms: ['ios', 'android'],
-		version: '1.0.34',
+		version: '1.0.37',
 		orientation: 'portrait',
 		icon: './assets/icon.png',
 		splash: {
@@ -28,7 +28,7 @@ export default {
 		},
 		android: {
 			package: 'com.socialbrain.social_brain_contacts',
-			versionCode: 7,
+			versionCode: 9,
 			adaptiveIcon: {
 				foregroundImage: './assets/icon.png',
 				backgroundColor: '#68c7ac',

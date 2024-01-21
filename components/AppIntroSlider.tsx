@@ -1,7 +1,8 @@
-import React from "react";
-import { View, Text, Image } from "react-native";
-import AppIntroSlider from "react-native-app-intro-slider";
-import { SlideGraphics } from "../config/images";
+import React from 'react'
+import { View, Text, Image, TouchableOpacity } from 'react-native'
+import AppIntroSlider from 'react-native-app-intro-slider'
+import useStore from '../store'
+import { SlideGraphics } from '../config/images'
 
 type Slide = {
   key: string;
@@ -75,13 +76,13 @@ const AppIntroSliderScreen = ({ onDone }: { onDone: () => void }) => {
     onDone();
   };
 
-  const renderDoneButton = () => (
-    <View className="bg-primary rounded-full px-4 py-2">
-      <Text className="text-white font-bold" onPress={handleDoneButton}>
-        Done
-      </Text>
-    </View>
-  );
+	const renderDoneButton = () => (
+		<TouchableOpacity onPress={toggleIntroSlider}>
+			<View className='bg-primary rounded-full px-4 py-2'>
+				<Text className='text-white font-bold'>Done</Text>
+			</View>
+		</TouchableOpacity>
+	);
 
   const renderNextButton = () => (
     <View className="bg-primary rounded-full px-4 py-2">
